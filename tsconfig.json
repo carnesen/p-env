@@ -1,0 +1,17 @@
+{
+	"extends": "@carnesen/tsconfig/tsconfig.json",
+	"include": [
+		"src"
+	],
+	"compilerOptions": {
+		"rootDir": "./src",
+		"outDir": "./lib",
+		"types": [
+			"jest",
+			"node"
+		]
+	},
+	"ts-node": {
+		"transpileOnly": true
+	},
+}
