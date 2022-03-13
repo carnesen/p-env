@@ -1,3 +1,4 @@
+import { PEnvError } from './p-env-error';
 import { PEnvType, PEnvTypeConfig } from './p-env-type';
 import {
 	safeParseFailure,
@@ -14,10 +15,10 @@ export class PEnvString extends PEnvType<string> {
 		super(config);
 		if (config.maxLength) {
 			if (config.maxLength < 0) {
-				throw new Error('Config maxLength must be non-negative');
+				throw new PEnvError('Config.maxLength must be non-negative');
 			}
 			if (config.default.length > config.maxLength) {
-				throw new Error(
+				throw new PEnvError(
 					`Default value "${config.default}" is longer than maxLength=${config.maxLength}`,
 				);
 			}

@@ -1,3 +1,4 @@
+import { PEnvError } from './p-env-error';
 import { loadProcessEnv } from './process-env';
 import {
 	safeParseFailure,
@@ -27,7 +28,7 @@ export abstract class PEnvType<Parsed = unknown> {
 		if (safeParsed.success) {
 			return safeParsed.value;
 		}
-		throw new Error(safeParsed.reason);
+		throw new PEnvError(safeParsed.reason);
 	}
 
 	safeParse(
