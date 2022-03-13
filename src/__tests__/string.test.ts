@@ -1,6 +1,6 @@
 import { p } from '..';
 import { PEnvError } from '../p-env-error';
-import { NODE_ENV_PRODUCTION } from '../p-env-type';
+import { NODE_ENV_PRODUCTION } from '../p-env-abstract-type';
 import { safeParseSuccess } from '../safe-parse-result';
 
 describe('non-optional string', () => {

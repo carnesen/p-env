@@ -1,5 +1,5 @@
 import { PEnvError } from './p-env-error';
-import { PEnvType, PEnvTypeConfig } from './p-env-type';
+import { PEnvAbstractType, PEnvTypeConfig } from './p-env-abstract-type';
 import {
 	safeParseFailure,
 	SafeParseResult,
@@ -10,7 +10,7 @@ export interface PEnvStringConfig extends PEnvTypeConfig<string> {
 	maxLength?: number;
 }
 
-export class PEnvString extends PEnvType<string> {
+export class PEnvString extends PEnvAbstractType<string> {
 	constructor(readonly config: PEnvStringConfig) {
 		super(config);
 		if (config.maxLength) {

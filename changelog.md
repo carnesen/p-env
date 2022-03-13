@@ -2,4 +2,4 @@
 
 ## Upcoming
 
-Initial release with support for defining a schema composed of number and string fields
+Initial release with schema support for boolean, number, and string fields.
