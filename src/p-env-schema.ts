@@ -5,6 +5,7 @@ import {
 	SafeParseResult,
 	safeParseSuccess,
 } from './safe-parse-result';
+import { PEnvError } from './p-env-error';
 
 export type AnyPEnvShape = Record<string, PEnvType>;
 
@@ -20,7 +21,7 @@ export class PEnvSchema<Shape extends AnyPEnvShape> {
 		if (safeParsed.success) {
 			return safeParsed.value;
 		}
-		throw new Error(safeParsed.reason);
+		throw new PEnvError(safeParsed.reason);
 	}
 
 	safeParse(processEnv = loadProcessEnv()): SafeParseResult<PEnvParsed<Shape>> {
