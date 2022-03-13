@@ -1,6 +1,6 @@
 import { p } from '..';
 import { PEnvError } from '../p-env-error';
-import { NODE_ENV_PRODUCTION } from '../p-env-type';
+import { NODE_ENV_PRODUCTION } from '../p-env-abstract-type';
 
 describe('number', () => {
 	const type = p.number({ default: 5, minimum: 0, maximum: 10, integer: true });

@@ -1,5 +1,5 @@
 import { PEnvError } from './p-env-error';
-import { PEnvType, PEnvTypeConfig } from './p-env-type';
+import { PEnvAbstractType, PEnvTypeConfig } from './p-env-abstract-type';
 import {
 	safeParseFailure,
 	SafeParseResult,
@@ -18,7 +18,7 @@ export interface PEnvNumberConfig extends PEnvIntegerConfig {
 	integer?: boolean;
 }
 
-export class PEnvNumber extends PEnvType<number> {
+export class PEnvNumber extends PEnvAbstractType<number> {
 	constructor(readonly config: PEnvNumberConfig) {
 		super(config);
 

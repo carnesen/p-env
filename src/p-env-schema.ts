@@ -1,5 +1,5 @@
 import { loadProcessEnv } from './process-env';
-import { PEnvType } from './p-env-type';
+import { PEnvAbstractType } from './p-env-abstract-type';
 import {
 	safeParseFailure,
 	SafeParseResult,
@@ -7,24 +7,26 @@ import {
 } from './safe-parse-result';
 import { PEnvError } from './p-env-error';
 
-export type AnyPEnvShape = Record<string, PEnvType>;
+export type AnyPEnvShape = Record<string, PEnvAbstractType>;
 
-export type PEnvParsed<Shape extends AnyPEnvShape> = {
+export type PEnvParsedProcessEnv<Shape extends AnyPEnvShape> = {
 	[name in keyof Shape]: Shape[name]['config']['default'];
 };
 
 export class PEnvSchema<Shape extends AnyPEnvShape> {
 	constructor(readonly shape: Shape) {}
 
-	parse(processEnv = loadProcessEnv()): PEnvParsed<Shape> {
-		const safeParsed = this.safeParse(processEnv);
+	parseProcessEnv(processEnv = loadProcessEnv()): PEnvParsedProcessEnv<Shape> {
+		const safeParsed = this.safeParseProcessEnv(processEnv);
 		if (safeParsed.success) {
 			return safeParsed.value;
 		}
 		throw new PEnvError(safeParsed.reason);
 	}
 
-	safeParse(processEnv = loadProcessEnv()): SafeParseResult<PEnvParsed<Shape>> {
+	safeParseProcessEnv(
+		processEnv = loadProcessEnv(),
+	): SafeParseResult<PEnvParsedProcessEnv<Shape>> {
 		const parsed: Record<string, unknown> = {};
 		const failureReasons: string[] = [];
 		const { NODE_ENV } = processEnv;
@@ -47,7 +49,7 @@ export class PEnvSchema<Shape extends AnyPEnvShape> {
 			return safeParseFailure(failureReasons.join('. '));
 		}
 
-		return safeParseSuccess(parsed as PEnvParsed<Shape>);
+		return safeParseSuccess(parsed as PEnvParsedProcessEnv<Shape>);
 	}
 
 	static create<NewShape extends AnyPEnvShape>(

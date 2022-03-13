@@ -17,7 +17,7 @@ export type ParseOptions = {
 	NODE_ENV?: string;
 };
 
-export abstract class PEnvType<Parsed = unknown> {
+export abstract class PEnvAbstractType<Parsed = unknown> {
 	constructor(readonly config: PEnvTypeConfig<Parsed>) {}
 
 	/** Parse an environment variable value if one is available */
