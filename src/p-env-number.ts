@@ -6,20 +6,30 @@ import {
 	safeParseSuccess,
 } from './safe-parse-result';
 
+/** Maximum allowed value for a "port" variable */
 export const PORT_MAXIMUM = 65535;
+/** Minimum allowed value for a "port" variable */
 export const PORT_MINIMUM = 0;
 
+/** Configuration options for the `integer` value factory */
 export interface PEnvIntegerConfig extends PEnvTypeConfig<number> {
+	/** If provided, values greater than this are considered invalid */
 	maximum?: number;
+	/** If provided, values less than this are considered invalid */
 	minimum?: number;
 }
 
+/** Configuration options for the `port` value factory */
+export type PEnvPortConfig = PEnvIntegerConfig;
+
+/** Configuration options for the `number` value factory */
 export interface PEnvNumberConfig extends PEnvIntegerConfig {
+	/** If true, non-integer values are considered invalid */
 	integer?: boolean;
 }
 
 export class PEnvNumber extends PEnvAbstractType<number> {
-	constructor(readonly config: PEnvNumberConfig) {
+	private constructor(readonly config: PEnvNumberConfig) {
 		super(config);
 
 		if (config.maximum) {
@@ -55,7 +65,7 @@ export class PEnvNumber extends PEnvAbstractType<number> {
 		}
 	}
 
-	_safeParse(envValue: string): SafeParseResult<number> {
+	protected _safeParse(envValue: string): SafeParseResult<number> {
 		const failureToConvert = safeParseFailure("can't be converted to a number");
 		const trimmed = envValue.trim();
 		if (trimmed.length === 0) {
@@ -92,15 +102,20 @@ export class PEnvNumber extends PEnvAbstractType<number> {
 		return safeParseSuccess(parsed);
 	}
 
+	/** Factory for `number`-valued environment variables */
 	static create(config: PEnvNumberConfig): PEnvNumber {
 		return new PEnvNumber(config);
 	}
 
+	/** Factory for integer-valued (`number`) environment variables. */
 	static createInteger(config: PEnvIntegerConfig): PEnvNumber {
 		return new PEnvNumber({ ...config, integer: true });
 	}
 
-	static createPort(config: PEnvIntegerConfig): PEnvNumber {
+	/** Factory for integer-valued (`number`) environment variables between 0 and
+	 * 65535, suitable for usage as a server [IP
+	 * port](https://en.wikipedia.org/wiki/Port_(computer_networking)) */
+	static createPort(config: PEnvPortConfig): PEnvNumber {
 		const maximum =
 			typeof config.maximum === 'number' ? config.maximum : PORT_MAXIMUM;
 		if (maximum > PORT_MAXIMUM) {

@@ -7,11 +7,12 @@ import {
 } from './safe-parse-result';
 
 export interface PEnvStringConfig extends PEnvTypeConfig<string> {
+	/** If provided, a value longer than this is considered invalid */
 	maxLength?: number;
 }
 
 export class PEnvString extends PEnvAbstractType<string> {
-	constructor(readonly config: PEnvStringConfig) {
+	private constructor(readonly config: PEnvStringConfig) {
 		super(config);
 		if (config.maxLength) {
 			if (config.maxLength < 0) {
@@ -25,7 +26,7 @@ export class PEnvString extends PEnvAbstractType<string> {
 		}
 	}
 
-	_safeParse(envValue: string): SafeParseResult<string> {
+	protected _safeParse(envValue: string): SafeParseResult<string> {
 		if (
 			typeof this.config.maxLength === 'number' &&
 			envValue.length > this.config.maxLength
@@ -37,6 +38,7 @@ export class PEnvString extends PEnvAbstractType<string> {
 		return safeParseSuccess(envValue);
 	}
 
+	/** Factory for `string`-valued environment variables */
 	static create(options: PEnvStringConfig): PEnvString {
 		return new PEnvString(options);
 	}
