@@ -14,8 +14,7 @@
 		"release": "carnesen-dev release",
 		"start": "node lib",
 		"test": "./scripts/test.sh",
-		"unit-test": "NODE_ENV=test jest src",
-		"unit-test:coverage": "npm run unit-test -- --coverage"
+		"unit-test": "NODE_ENV=test jest src --coverage"
 	},
 	"devDependencies": {
 		"@carnesen/dev": "^0.2.1",

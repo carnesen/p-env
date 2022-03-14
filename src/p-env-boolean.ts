@@ -8,11 +8,11 @@ import {
 export type PEnvBooleanConfig = PEnvTypeConfig<boolean>;
 
 export class PEnvBoolean extends PEnvAbstractType<boolean> {
-	constructor(readonly config: PEnvBooleanConfig) {
+	private constructor(readonly config: PEnvBooleanConfig) {
 		super(config);
 	}
 
-	_safeParse(envValue: string): SafeParseResult<boolean> {
+	protected _safeParse(envValue: string): SafeParseResult<boolean> {
 		switch (envValue.trim().toLowerCase()) {
 			case '1':
 			case 'yes':
@@ -30,6 +30,9 @@ export class PEnvBoolean extends PEnvAbstractType<boolean> {
 		}
 	}
 
+	/** Factory for boolean-valued environment variables. "1", "true", "yes" (and
+	 * their upper-case variations) parse to `true`. "0", "false", and "no" (and
+	 * their upper-case variations) parse to `false` */
 	static create(options: PEnvBooleanConfig): PEnvBoolean {
 		return new PEnvBoolean(options);
 	}

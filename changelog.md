@@ -2,9 +2,11 @@
 
 ## Upcoming
 
-Feature: Support for logging environment variables in PEnvSchema#parseProcessEnv.
+Feature: Support comma-separated `string[]`-valued variables as `p.stringArray`
 
-Breaking: Change argument of PEnvSchema#parseProcessEnv from [processEnv] to [{log, processEnv}].
+Feature: Support for logging environment variables in PEnvSchema#parseProcessEnv
+
+Breaking: Change argument of PEnvSchema#parseProcessEnv from [processEnv] to [{log, processEnv}]
 
 ## carnesen-p-env-0.0.0 (2022-03-13)
 

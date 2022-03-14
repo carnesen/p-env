@@ -3,6 +3,7 @@ export type SafeParseSuccess<Value = unknown> = {
 	value: Value;
 };
 
+/** Factory for SafeParseSuccess objects */
 export function safeParseSuccess<Value = unknown>(
 	value: Value,
 ): SafeParseSuccess<Value> {
@@ -14,6 +15,7 @@ export function safeParseSuccess<Value = unknown>(
 
 export type SafeParseFailure = { success: false; reason: string };
 
+/** Factory for SafeParseFailure objects */
 export function safeParseFailure(reason: string): SafeParseFailure {
 	return {
 		success: false,
@@ -21,6 +23,7 @@ export function safeParseFailure(reason: string): SafeParseFailure {
 	};
 }
 
+/** success-discriminated union of possible safeParse results */
 export type SafeParseResult<ParsedValue = unknown> =
 	| SafeParseSuccess<ParsedValue>
 	| SafeParseFailure;

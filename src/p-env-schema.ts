@@ -26,8 +26,9 @@ export type PEnvParseProcessEnvOptions = {
 };
 
 export class PEnvSchema<Shape extends AnyPEnvShape> {
-	constructor(readonly shape: Shape) {}
+	private constructor(readonly shape: Shape) {}
 
+	/** Parse the global process.env, throwing on any parse/validation error */
 	parseProcessEnv(
 		options: PEnvParseProcessEnvOptions = {},
 	): PEnvParsedProcessEnv<Shape> {
@@ -38,6 +39,7 @@ export class PEnvSchema<Shape extends AnyPEnvShape> {
 		throw new PEnvError(safeParsed.reason);
 	}
 
+	/** Parse the global process.env, returning a SafeParseResult container */
 	safeParseProcessEnv(
 		options: PEnvParseProcessEnvOptions = {},
 	): SafeParseResult<PEnvParsedProcessEnv<Shape>> {
@@ -77,6 +79,7 @@ export class PEnvSchema<Shape extends AnyPEnvShape> {
 		return safeParseSuccess(parsed as PEnvParsedProcessEnv<Shape>);
 	}
 
+	/** Factory for process.env schema declarations */
 	static create<NewShape extends AnyPEnvShape>(
 		shape: NewShape,
 	): PEnvSchema<NewShape> {
