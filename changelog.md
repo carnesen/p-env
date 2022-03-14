@@ -2,6 +2,8 @@
 
 ## Upcoming
 
+## carnesen-p-env-0.1.0 (2022-03-13)
+
 Feature: Support comma-separated `string[]`-valued variables as `p.stringArray`
 
 Feature: Support for logging environment variables in PEnvSchema#parseProcessEnv
