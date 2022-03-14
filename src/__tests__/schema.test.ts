@@ -16,7 +16,9 @@ describe('schema', () => {
 
 	it('returns a failure result with all the reasons', () => {
 		const result = schema.safeParseProcessEnv({
-			NODE_ENV: NODE_ENV_PRODUCTION,
+			processEnv: {
+				NODE_ENV: NODE_ENV_PRODUCTION,
+			},
 		});
 		if (result.success) {
 			throw new Error('Expected safeParse to fail');
@@ -35,9 +37,57 @@ describe('schema', () => {
 
 	it('parse throws all validation error if there are any', () => {
 		const func = () =>
-			schema.parseProcessEnv({ NUMBER: 'foo', STRING: 'foo bar baz' });
+			schema.parseProcessEnv({
+				processEnv: { NUMBER: 'foo', STRING: 'foo bar baz' },
+			});
 		expect(func).toThrow(PEnvError);
 		expect(func).toThrow("can't be converted to a number");
 		expect(func).toThrow('longer than maxLength');
+	});
+
+	it('logs if a logger is provided', () => {
+		const logger = {
+			error: jest.fn(),
+			log: jest.fn(),
+		};
+		schema.safeParseProcessEnv({
+			logger,
+			processEnv: {
+				NUMBER: '3',
+				STRING: 'foo bar baz',
+			},
+		});
+		expect(logger.error.mock.calls).toEqual([
+			['STRING value "foo bar baz" is longer than maxLength=3'],
+		]);
+		expect(logger.log.mock.calls).toEqual([['NUMBER=3']]);
+	});
+
+	it('uses logger.log for errors if logger.error is not provided', () => {
+		const logger = {
+			error: jest.fn(),
+			log: jest.fn(),
+		};
+		schema.safeParseProcessEnv({
+			logger,
+			processEnv: {
+				NUMBER: '3',
+				STRING: 'foo bar baz',
+			},
+		});
+		expect(logger.error.mock.calls).toEqual([
+			['STRING value "foo bar baz" is longer than maxLength=3'],
+		]);
+		expect(logger.log.mock.calls).toEqual([['NUMBER=3']]);
+	});
+
+	it('obfuscates the value if the name contains "secret"', () => {
+		const logger = {
+			log: jest.fn(),
+		};
+		p.schema({ SECRET_KEY: p.string({ default: '' }) }).safeParseProcessEnv({
+			logger,
+		});
+		expect(logger.log.mock.calls).toEqual([['SECRET_KEY=xxxxxxx']]);
 	});
 });
