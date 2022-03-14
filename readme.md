@@ -17,17 +17,25 @@ import { p } from '@carnesen/p-env';
 const appEnvSchema = p.schema({
 	APP_NAME: p.string({ default: 'my-app' }),
 	PORT: p.port({ default: 8080, optional: true }),
+	SECRET_KEY: p.string({ default: '' }),
 	STRICT_MODE: p.boolean({ default: false, optional: true }),
 });
 
 type AppEnv = p.infer<typeof appEnvSchema>;
 
-const appEnv: AppEnv = appEnvSchema.parseProcessEnv();
+process.env.PORT = "9999";
 
-console.log(appEnv.APP_NAME); // "my-app"
+const appEnv: AppEnv = appEnvSchema.parseProcessEnv({ logger: console });
+// APP_NAME=my-app
+// PORT=9999
+// SECRET_KEY=xxxxxxx
+// STRICT_MODE=false
+
+console.log(appEnv.APP_NAME);
+// my-app
 ```
 
-The default value will be used if no value is present for this variable in the process environment and if NODE_ENV is not set to "production" in the process environment. When NODE_ENV _is_ set to "production", `parseProcessEnv` throws if no value for a variable is present in the process environment unless that variable is configured with `optional: true` in which case the default value is used.
+The default value must be provided and will be used for a variable if it's not set in the process environment and if NODE_ENV is not "production". When NODE_ENV is "production", the default value is ignored unless the variable has `optional: true`. Said another way, when NODE_ENV is "production" environment variables are mandatory by default. The schema `safeParseProcessEnv` method returns `{ success: true, value: <the parsed process.env>}` if there are no validation/parse errors or `{ success: false, reason: <validation/parse error messages>}` otherwise. The schema `parseProcessEnv` method returns the parsed result value or throws if there's a validation/parse error.
 
 ## Related
 
