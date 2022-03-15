@@ -24,5 +24,6 @@ set -o xtrace
 npm run lint
 npm run unit-test
 npm run build
+npm run example
 
 echo "All tests completed sucessfully"

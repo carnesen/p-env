@@ -9,6 +9,7 @@
 	},
 	"scripts": {
 		"build": "./scripts/build.sh",
+		"example": "ts-node src/example.ts",
 		"lint": "eslint --ext .ts src",
 		"lint:fix": "npm run lint -- --fix",
 		"release": "carnesen-dev release",

@@ -14,20 +14,20 @@ Example usage:
 ```TypeScript
 import { p } from '@carnesen/p-env';
 
-const appEnvSchema = p.schema({
-	APP_NAME: p.string({ default: 'my-app' }),
-	PORT: p.port({ default: 8080, optional: true }),
-	SECRET_KEY: p.string({ default: '' }),
-	STRICT_MODE: p.boolean({ default: false, optional: true }),
-});
+const appEnvSchema = p
+  .schema({
+    APP_NAME: p.string({ default: 'my-app' }),
+    PORT: p.port({ default: 8080, optional: true }),
+    SECRET_KEY: p.string({ default: '' }),
+    STRICT_MODE: p.boolean({ default: false, optional: true }),
+  })
+  .setLogger(console);
 
 type AppEnv = p.infer<typeof appEnvSchema>;
 
-process.env.PORT = "9999";
-
-const appEnv: AppEnv = appEnvSchema.parseProcessEnv({ logger: console });
+const appEnv: AppEnv = appEnvSchema.parseProcessEnv();
 // APP_NAME=my-app
-// PORT=9999
+// PORT=8080
 // SECRET_KEY=xxxxxxx
 // STRICT_MODE=false
 

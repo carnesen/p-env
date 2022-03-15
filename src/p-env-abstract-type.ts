@@ -1,5 +1,5 @@
 import { PEnvError } from './p-env-error';
-import { loadProcessEnv } from './process-env';
+import { pEnvLoader } from './p-env-loader';
 import {
 	safeParseFailure,
 	SafeParseResult,
@@ -51,7 +51,7 @@ export abstract class PEnvAbstractType<Parsed = unknown> {
 
 		// Not optional
 
-		const { NODE_ENV } = 'NODE_ENV' in options ? options : loadProcessEnv();
+		const { NODE_ENV } = 'NODE_ENV' in options ? options : pEnvLoader();
 
 		return NODE_ENV === NODE_ENV_PRODUCTION
 			? safeParseFailure(
