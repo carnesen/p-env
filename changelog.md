@@ -2,6 +2,8 @@
 
 ## Upcoming
 
+## carnesen-p-env-0.2.0 (2022-03-14)
+
 Breaking: Tweak logger API one more time. Now it's e.g.:
 ```TypeScript
 const schema = p.schema({}).setLogger(console)
