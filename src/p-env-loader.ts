@@ -4,8 +4,10 @@
 /** Expected type of globalThis.process.env */
 export type ProcessEnv = Record<string, string | undefined>;
 
+export type PEnvLoader = () => ProcessEnv;
+
 /** Safely load the global variable process.env defaulting to {} */
-export function loadProcessEnv(): ProcessEnv {
+export function pEnvLoader(): ProcessEnv {
 	/* eslint-disable-next-line @typescript-eslint/no-explicit-any */
 	return (globalThis as any).process?.env || {};
 }

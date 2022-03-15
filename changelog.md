@@ -2,6 +2,11 @@
 
 ## Upcoming
 
+Breaking: Tweak logger API one more time. Now it's e.g.:
+```TypeScript
+const schema = p.schema({}).setLogger(console)
+```
+
 ## carnesen-p-env-0.1.0 (2022-03-13)
 
 Feature: Support comma-separated `string[]`-valued variables as `p.stringArray`

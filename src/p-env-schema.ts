@@ -1,4 +1,4 @@
-import { loadProcessEnv, ProcessEnv } from './process-env';
+import { PEnvLoader, pEnvLoader } from './p-env-loader';
 import { PEnvAbstractType } from './p-env-abstract-type';
 import {
 	safeParseFailure,
@@ -20,19 +20,16 @@ export type PEnvLogger = {
 	log?: PEnvLoggerMethod;
 };
 
-export type PEnvParseProcessEnvOptions = {
-	logger?: PEnvLogger;
-	processEnv?: ProcessEnv;
-};
-
 export class PEnvSchema<Shape extends AnyPEnvShape> {
+	private loader?: PEnvLoader;
+
+	private logger?: PEnvLogger;
+
 	private constructor(readonly shape: Shape) {}
 
 	/** Parse the global process.env, throwing on any parse/validation error */
-	parseProcessEnv(
-		options: PEnvParseProcessEnvOptions = {},
-	): PEnvParsedProcessEnv<Shape> {
-		const safeParsed = this.safeParseProcessEnv(options);
+	parseProcessEnv(): PEnvParsedProcessEnv<Shape> {
+		const safeParsed = this.safeParseProcessEnv();
 		if (safeParsed.success) {
 			return safeParsed.value;
 		}
@@ -40,10 +37,9 @@ export class PEnvSchema<Shape extends AnyPEnvShape> {
 	}
 
 	/** Parse the global process.env, returning a SafeParseResult container */
-	safeParseProcessEnv(
-		options: PEnvParseProcessEnvOptions = {},
-	): SafeParseResult<PEnvParsedProcessEnv<Shape>> {
-		const { processEnv = loadProcessEnv(), logger } = options;
+	safeParseProcessEnv(): SafeParseResult<PEnvParsedProcessEnv<Shape>> {
+		const processEnv = (this.loader || pEnvLoader)();
+		const { logger } = this;
 		const parsed: Record<string, unknown> = {};
 		const reasons: string[] = [];
 		const { NODE_ENV } = processEnv;
@@ -77,6 +73,16 @@ export class PEnvSchema<Shape extends AnyPEnvShape> {
 		}
 
 		return safeParseSuccess(parsed as PEnvParsedProcessEnv<Shape>);
+	}
+
+	setLoader(loader: PEnvLoader): PEnvSchema<Shape> {
+		this.loader = loader;
+		return this;
+	}
+
+	setLogger(logger: PEnvLogger): PEnvSchema<Shape> {
+		this.logger = logger;
+		return this;
 	}
 
 	/** Factory for process.env schema declarations */
