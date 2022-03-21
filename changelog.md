@@ -2,6 +2,15 @@
 
 ## Upcoming
 
+Breaking: Tweak the logger API one more time for real. Now it's e.g. 
+```TypeScript
+const schema = p.schema(shape, { logger });
+const env = schema.parseProcessEnv();
+// OR
+const schema = p.schema(shape);
+const env = schema.parseProcessEnv({ logger })
+```
+
 ## carnesen-p-env-0.2.0 (2022-03-14)
 
 Breaking: Tweak logger API one more time. Now it's e.g.:

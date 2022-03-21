@@ -13,6 +13,8 @@ export interface PEnvTypeConfig<ParsedValue = unknown> {
 	/** If true, use the default value even when NODE_ENV === "production". If
 	 * false or undefined, this variable _must_ be provided in the environment */
 	optional?: boolean;
+	/** If true, the value will be obfuscated in logs */
+	secret?: boolean;
 }
 
 export const NODE_ENV_PRODUCTION = 'production';

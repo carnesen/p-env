@@ -9,18 +9,29 @@ describe('schema', () => {
 		STRING: p.string({ default: 'foo', maxLength: 3 }),
 	});
 
-	const { shape } = schema;
+	it('can be instantiated with a config object', () => {
+		const logger = { log: jest.fn() };
+		p.schema(schema.shape, { logger }).safeParseProcessEnv();
+		expect(logger.log).toHaveBeenCalled();
+	});
+
+	it('can be provided with config object overrides for parsing', () => {
+		const instanceConfig = { logger: { log: jest.fn() } };
+		const safeParseConfig = { logger: { log: jest.fn() } };
+		p.schema(schema.shape, instanceConfig).safeParseProcessEnv(safeParseConfig);
+		expect(instanceConfig.logger.log).not.toHaveBeenCalled();
+		expect(safeParseConfig.logger.log).toHaveBeenCalled();
+	});
 
 	it('returns an object of the correct shape and content', () => {
-		const parsed = p.schema(shape).parseProcessEnv();
+		const parsed = schema.parseProcessEnv();
 		expect(parsed).toEqual({ NUMBER: 5, STRING: 'foo' });
 	});
 
 	it('returns a failure result with all the reasons', () => {
-		const result = p
-			.schema(shape)
-			.setLoader(() => ({ NODE_ENV: NODE_ENV_PRODUCTION }))
-			.safeParseProcessEnv();
+		const result = schema.safeParseProcessEnv({
+			loader: () => ({ NODE_ENV: NODE_ENV_PRODUCTION }),
+		});
 		if (result.success) {
 			throw new Error('Expected safeParse to fail');
 		}
@@ -29,20 +40,18 @@ describe('schema', () => {
 	});
 
 	it('parse loads actual process.env if default loader is used', () => {
-		process.env.SOME_VALUE = 'foo';
-		expect(
-			p
-				.schema({ SOME_VALUE: p.string({ default: 'bar' }) })
-				.safeParseProcessEnv(),
-		).toEqual(safeParseSuccess({ SOME_VALUE: 'foo' }));
+		process.env.STRING = 'xyz';
+		expect(schema.safeParseProcessEnv()).toEqual(
+			safeParseSuccess({ NUMBER: 5, STRING: 'xyz' }),
+		);
+		delete process.env.STRING;
 	});
 
 	it('parse throws all validation error if there are any', () => {
 		const func = () =>
-			p
-				.schema(shape)
-				.setLoader(() => ({ NUMBER: 'foo', STRING: 'foo bar baz' }))
-				.parseProcessEnv();
+			schema.parseProcessEnv({
+				loader: () => ({ NUMBER: 'foo', STRING: 'foo bar baz' }),
+			});
 		expect(func).toThrow(PEnvError);
 		expect(func).toThrow("can't be converted to a number");
 		expect(func).toThrow('longer than maxLength');
@@ -53,13 +62,11 @@ describe('schema', () => {
 			error: jest.fn(),
 			log: jest.fn(),
 		};
-		p.schema(shape)
-			.setLogger(logger)
-			.setLoader(() => ({
-				NUMBER: '3',
-				STRING: 'foo bar baz',
-			}))
-			.safeParseProcessEnv();
+		const loader = () => ({
+			NUMBER: '3',
+			STRING: 'foo bar baz',
+		});
+		schema.safeParseProcessEnv({ logger, loader });
 		expect(logger.error.mock.calls).toEqual([
 			['STRING value "foo bar baz" is longer than maxLength=3'],
 		]);
@@ -71,26 +78,24 @@ describe('schema', () => {
 			error: jest.fn(),
 			log: jest.fn(),
 		};
-		p.schema(shape)
-			.setLogger(logger)
-			.setLoader(() => ({
-				NUMBER: '3',
-				STRING: 'foo bar baz',
-			}))
-			.safeParseProcessEnv();
+		const loader = () => ({
+			NUMBER: '3',
+			STRING: 'foo bar baz',
+		});
+		schema.safeParseProcessEnv({ logger, loader });
 		expect(logger.error.mock.calls).toEqual([
 			['STRING value "foo bar baz" is longer than maxLength=3'],
 		]);
 		expect(logger.log.mock.calls).toEqual([['NUMBER=3']]);
 	});
 
-	it('obfuscates the value if the name contains "secret"', () => {
+	it('obfuscates the value if the type configuration has secret=true', () => {
 		const logger = {
 			log: jest.fn(),
 		};
-		p.schema({ SECRET_KEY: p.string({ default: '' }) })
-			.setLogger(logger)
-			.safeParseProcessEnv();
+		p.schema({
+			SECRET_KEY: p.string({ default: '', secret: true }),
+		}).safeParseProcessEnv({ logger });
 		expect(logger.log.mock.calls).toEqual([['SECRET_KEY=xxxxxxx']]);
 	});
 });
