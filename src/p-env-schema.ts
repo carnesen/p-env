@@ -20,26 +20,37 @@ export type PEnvLogger = {
 	log?: PEnvLoggerMethod;
 };
 
+export type PEnvSchemaConfig = {
+	loader?: PEnvLoader;
+	logger?: PEnvLogger;
+};
+
 export class PEnvSchema<Shape extends AnyPEnvShape> {
-	private loader?: PEnvLoader;
+	private constructor(
+		readonly shape: Shape,
+		readonly config: PEnvSchemaConfig,
+	) {}
 
-	private logger?: PEnvLogger;
-
-	private constructor(readonly shape: Shape) {}
-
-	/** Parse the global process.env, throwing on any parse/validation error */
-	parseProcessEnv(): PEnvParsedProcessEnv<Shape> {
-		const safeParsed = this.safeParseProcessEnv();
+	/** Parse the global process.env, throwing on any parse/validation error
+	 * @param config Configuration overrides
+	 */
+	parseProcessEnv(config: PEnvSchemaConfig = {}): PEnvParsedProcessEnv<Shape> {
+		const safeParsed = this.safeParseProcessEnv(config);
 		if (safeParsed.success) {
 			return safeParsed.value;
 		}
 		throw new PEnvError(safeParsed.reason);
 	}
 
-	/** Parse the global process.env, returning a SafeParseResult container */
-	safeParseProcessEnv(): SafeParseResult<PEnvParsedProcessEnv<Shape>> {
-		const processEnv = (this.loader || pEnvLoader)();
-		const { logger } = this;
+	/** Parse the global process.env
+	 * @param config
+	 * @returns a SafeParseResult container */
+	safeParseProcessEnv(
+		config: PEnvSchemaConfig = {},
+	): SafeParseResult<PEnvParsedProcessEnv<Shape>> {
+		const combinedConfig = { ...this.config, ...config };
+		const processEnv = (combinedConfig.loader || pEnvLoader)();
+		const { logger } = combinedConfig;
 		const parsed: Record<string, unknown> = {};
 		const reasons: string[] = [];
 		const { NODE_ENV } = processEnv;
@@ -49,7 +60,7 @@ export class PEnvSchema<Shape extends AnyPEnvShape> {
 			if (result.success) {
 				parsed[name] = result.value;
 				if (logger && logger.log) {
-					const loggedValue = name.toLowerCase().includes('secret')
+					const loggedValue = valueType.config.secret
 						? 'xxxxxxx'
 						: result.value;
 					logger.log(`${name}=${loggedValue}`);
@@ -75,20 +86,11 @@ export class PEnvSchema<Shape extends AnyPEnvShape> {
 		return safeParseSuccess(parsed as PEnvParsedProcessEnv<Shape>);
 	}
 
-	setLoader(loader: PEnvLoader): PEnvSchema<Shape> {
-		this.loader = loader;
-		return this;
-	}
-
-	setLogger(logger: PEnvLogger): PEnvSchema<Shape> {
-		this.logger = logger;
-		return this;
-	}
-
 	/** Factory for process.env schema declarations */
 	static create<NewShape extends AnyPEnvShape>(
 		shape: NewShape,
+		config: PEnvSchemaConfig = {},
 	): PEnvSchema<NewShape> {
-		return new PEnvSchema(shape);
+		return new PEnvSchema(shape, config);
 	}
 }
