@@ -1,18 +1,10 @@
+/** The exports of this module are exported in the main index as the primary
+ * external API, "p" */
 import { PEnvParsedProcessEnv, PEnvSchema } from './p-env-schema';
 import { PEnvNumber } from './p-env-number';
 import { PEnvString } from './p-env-string';
 import { PEnvBoolean } from './p-env-boolean';
 import { PEnvStringArray } from './p-env-string-array';
-
-export * from './p-env-abstract-type';
-export * from './p-env-boolean';
-export * from './p-env-error';
-export * from './p-env-loader';
-export * from './p-env-number';
-export * from './p-env-schema';
-export * from './p-env-string-array';
-export * from './p-env-string';
-export * from './safe-parse-result';
 
 const boolean = PEnvBoolean.create;
 const integer = PEnvNumber.createInteger;

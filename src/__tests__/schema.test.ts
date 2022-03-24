@@ -89,13 +89,32 @@ describe('schema', () => {
 		expect(logger.log.mock.calls).toEqual([['NUMBER=3']]);
 	});
 
-	it('obfuscates the value if the type configuration has secret=true', () => {
+	it('obfuscates the logged value if the type config has secret=true', () => {
 		const logger = {
 			log: jest.fn(),
 		};
 		p.schema({
-			SECRET_KEY: p.string({ default: '', secret: true }),
+			SECRET_KEY: p.string({ default: 'abc123', secret: true }),
 		}).safeParseProcessEnv({ logger });
-		expect(logger.log.mock.calls).toEqual([['SECRET_KEY=xxxxxxx']]);
+		expect(logger.log.mock.calls[0][0]).toMatch('SECRET_KEY=');
+		expect(logger.log.mock.calls[0][0]).not.toMatch('abc123');
+	});
+
+	it('obfuscates the environment value on error if the type config has secret=true', () => {
+		const logger = {
+			log: jest.fn(),
+			error: jest.fn(),
+		};
+		const result = p
+			.schema({
+				SECRET_NUMBER: p.number({ default: 0, secret: true, maximum: 1 }),
+			})
+			.safeParseProcessEnv({ logger, loader: () => ({ SECRET_NUMBER: '2' }) });
+		if (result.success) {
+			throw new Error('Expected failure');
+		}
+		expect(result.reason).not.toMatch('2');
+		expect(logger.error.mock.calls[0][0]).toMatch('SECRET_NUMBER');
+		expect(logger.error.mock.calls[0][0]).not.toMatch('2');
 	});
 });

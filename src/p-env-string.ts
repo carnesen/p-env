@@ -26,7 +26,7 @@ export class PEnvString extends PEnvAbstractType<string> {
 		}
 	}
 
-	protected _safeParse(envValue: string): SafeParseResult<string> {
+	protected safeParseInternal(envValue: string): SafeParseResult<string> {
 		if (
 			typeof this.config.maxLength === 'number' &&
 			envValue.length > this.config.maxLength
