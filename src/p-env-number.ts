@@ -65,7 +65,7 @@ export class PEnvNumber extends PEnvAbstractType<number> {
 		}
 	}
 
-	protected _safeParse(envValue: string): SafeParseResult<number> {
+	protected safeParseInternal(envValue: string): SafeParseResult<number> {
 		const failureToConvert = safeParseFailure("can't be converted to a number");
 		const trimmed = envValue.trim();
 		if (trimmed.length === 0) {

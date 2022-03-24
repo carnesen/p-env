@@ -25,6 +25,8 @@ export type PEnvSchemaConfig = {
 	logger?: PEnvLogger;
 };
 
+const REDACTED_VALUE = '<redacted>';
+
 export class PEnvSchema<Shape extends AnyPEnvShape> {
 	private constructor(
 		readonly shape: Shape,
@@ -61,14 +63,18 @@ export class PEnvSchema<Shape extends AnyPEnvShape> {
 				parsed[name] = result.value;
 				if (logger && logger.log) {
 					const loggedValue = valueType.config.secret
-						? 'xxxxxxx'
+						? REDACTED_VALUE
 						: result.value;
 					logger.log(`${name}=${loggedValue}`);
 				}
 			} else {
+				// !result.success
 				const parts = [name];
 				if (typeof envValue !== 'undefined') {
-					parts.push(`value "${envValue}"`);
+					const loggedEnvValue = valueType.config.secret
+						? REDACTED_VALUE
+						: envValue;
+					parts.push(`value "${loggedEnvValue}"`);
 				}
 				parts.push(result.reason);
 				const reason = parts.join(' ');

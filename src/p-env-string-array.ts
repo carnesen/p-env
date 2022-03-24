@@ -8,7 +8,7 @@ export class PEnvStringArray extends PEnvAbstractType<string[]> {
 		super(config);
 	}
 
-	protected _safeParse(envValue: string): SafeParseResult<string[]> {
+	protected safeParseInternal(envValue: string): SafeParseResult<string[]> {
 		return safeParseSuccess(envValue.split(','));
 	}
 

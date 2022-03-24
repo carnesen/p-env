@@ -2,6 +2,10 @@
 
 ## Upcoming
 
+Breaking: Change PEnvAbstractType method name from _safeParse to safeParseInternal. This is only a breaking change if you're using a custom PEnvAbstractType subclass.
+
+Fix: Redact environment value in error messages and logs if the type has `config.secret === true`.
+
 ## carnesen-p-env-0.3.0 (2022-03-20)
 
 Breaking: Tweak the logger API one more time for real. Now it's e.g. 

@@ -12,7 +12,7 @@ export class PEnvBoolean extends PEnvAbstractType<boolean> {
 		super(config);
 	}
 
-	protected _safeParse(envValue: string): SafeParseResult<boolean> {
+	protected safeParseInternal(envValue: string): SafeParseResult<boolean> {
 		switch (envValue.trim().toLowerCase()) {
 			case '1':
 			case 'yes':
