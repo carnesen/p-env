@@ -1,6 +1,6 @@
 import { p } from '..';
+import { NODE_ENV_PRODUCTION } from '../constants';
 import { PEnvError } from '../p-env-error';
-import { NODE_ENV_PRODUCTION } from '../p-env-abstract-type';
 import { safeParseSuccess } from '../safe-parse-result';
 
 describe('schema', () => {
@@ -35,8 +35,8 @@ describe('schema', () => {
 		if (result.success) {
 			throw new Error('Expected safeParse to fail');
 		}
-		expect(result.reason).toMatch('NUMBER must be provided');
-		expect(result.reason).toMatch('STRING must be provided');
+		expect(result.reason).toMatch('NUMBER is not optional');
+		expect(result.reason).toMatch('STRING is not optional');
 	});
 
 	it('parse loads actual process.env if default loader is used', () => {
@@ -47,7 +47,7 @@ describe('schema', () => {
 		delete process.env.STRING;
 	});
 
-	it('parse throws all validation error if there are any', () => {
+	it('parse throws all validation errors if there are any', () => {
 		const func = () =>
 			schema.parseProcessEnv({
 				loader: () => ({ NUMBER: 'foo', STRING: 'foo bar baz' }),
@@ -89,7 +89,21 @@ describe('schema', () => {
 		expect(logger.log.mock.calls).toEqual([['NUMBER=3']]);
 	});
 
-	it('obfuscates the logged value if the type config has secret=true', () => {
+	it('redacts the logged value when an environment value is used and secret=true', () => {
+		const logger = {
+			log: jest.fn(),
+		};
+		p.schema({
+			SECRET_KEY: p.string({ default: 'abc123', secret: true }),
+		}).safeParseProcessEnv({
+			logger,
+			loader: () => ({ SECRET_KEY: 'foobar' }),
+		});
+		expect(logger.log.mock.calls[0][0]).toMatch('SECRET_KEY=');
+		expect(logger.log.mock.calls[0][0]).not.toMatch('foobar');
+	});
+
+	it('redacts the logged value when the default value is used and secret=true', () => {
 		const logger = {
 			log: jest.fn(),
 		};
@@ -97,10 +111,11 @@ describe('schema', () => {
 			SECRET_KEY: p.string({ default: 'abc123', secret: true }),
 		}).safeParseProcessEnv({ logger });
 		expect(logger.log.mock.calls[0][0]).toMatch('SECRET_KEY=');
+		expect(logger.log.mock.calls[0][0]).toMatch('(default)');
 		expect(logger.log.mock.calls[0][0]).not.toMatch('abc123');
 	});
 
-	it('obfuscates the environment value on error if the type config has secret=true', () => {
+	it('redacts the environment value on error if the type config has secret=true', () => {
 		const logger = {
 			log: jest.fn(),
 			error: jest.fn(),

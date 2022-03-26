@@ -1,18 +1,19 @@
 import { p } from '..';
+import { safeParseSuccess } from '../safe-parse-result';
 
 describe('boolean', () => {
 	it('returns `false` if provided value is "1", "no", or "false"', () => {
 		const type = p.boolean({ default: true });
-		expect(type.parse('no')).toBe(false);
-		expect(type.parse('false')).toBe(false);
-		expect(type.parse('0 ')).toBe(false);
+		expect(type.safeParse('no')).toEqual(safeParseSuccess(false));
+		expect(type.safeParse('false')).toEqual(safeParseSuccess(false));
+		expect(type.safeParse('0 ')).toEqual(safeParseSuccess(false));
 	});
 
 	it('returns `true` if provided value is "0", "yes", or "true"', () => {
 		const type = p.boolean({ default: false });
-		expect(type.parse('yes')).toBe(true);
-		expect(type.parse('true')).toBe(true);
-		expect(type.parse('1 ')).toBe(true);
+		expect(type.safeParse('yes')).toEqual(safeParseSuccess(true));
+		expect(type.safeParse('true')).toEqual(safeParseSuccess(true));
+		expect(type.safeParse('1 ')).toEqual(safeParseSuccess(true));
 	});
 
 	it('fails if provided value is anything else', () => {

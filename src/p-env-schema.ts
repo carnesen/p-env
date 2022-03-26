@@ -6,6 +6,7 @@ import {
 	safeParseSuccess,
 } from './safe-parse-result';
 import { PEnvError } from './p-env-error';
+import { NODE_ENV_PRODUCTION } from './constants';
 
 export type AnyPEnvShape = Record<string, PEnvAbstractType>;
 
@@ -26,7 +27,6 @@ export type PEnvSchemaConfig = {
 };
 
 const REDACTED_VALUE = '<redacted>';
-
 export class PEnvSchema<Shape extends AnyPEnvShape> {
 	private constructor(
 		readonly shape: Shape,
@@ -58,34 +58,54 @@ export class PEnvSchema<Shape extends AnyPEnvShape> {
 		const { NODE_ENV } = processEnv;
 		for (const [name, valueType] of Object.entries(this.shape)) {
 			const envValue = processEnv[name];
-			const result = valueType.safeParse(envValue, { NODE_ENV });
-			if (result.success) {
-				parsed[name] = result.value;
-				if (logger && logger.log) {
-					const loggedValue = valueType.config.secret
-						? REDACTED_VALUE
-						: result.value;
-					logger.log(`${name}=${loggedValue}`);
+			if (typeof envValue === 'string') {
+				// A value was provided in the process environment
+				const result = valueType.safeParse(envValue);
+				if (result.success) {
+					parsed[name] = result.value;
+					if (logger && logger.log) {
+						const loggedValue = valueType.config.secret
+							? REDACTED_VALUE
+							: result.value;
+						logger.log(`${name}=${loggedValue}`);
+					}
+				} else {
+					// !result.success
+					const parts = [name];
+					if (typeof envValue !== 'undefined') {
+						const loggedEnvValue = valueType.config.secret
+							? REDACTED_VALUE
+							: envValue;
+						parts.push(`value "${loggedEnvValue}"`);
+					}
+					parts.push(result.reason);
+					const reason = parts.join(' ');
+					reasons.push(reason);
 				}
 			} else {
-				// !result.success
-				const parts = [name];
-				if (typeof envValue !== 'undefined') {
-					const loggedEnvValue = valueType.config.secret
+				// No value was provided in the process environment
+				if (valueType.config.optional || NODE_ENV !== NODE_ENV_PRODUCTION) {
+					parsed[name] = valueType.config.default;
+					const loggedValue = valueType.config.secret
 						? REDACTED_VALUE
-						: envValue;
-					parts.push(`value "${loggedEnvValue}"`);
+						: valueType.config.default;
+
+					if (logger && logger.log) {
+						logger.log(`${name}=${loggedValue} (default)`);
+					}
+				} else {
+					reasons.push(`${name} is not optional nor was a value provided`);
 				}
-				parts.push(result.reason);
-				const reason = parts.join(' ');
-				if (logger && logger.error) {
-					logger.error(reason);
-				}
-				reasons.push(reason);
 			}
 		}
 
 		if (reasons.length > 0) {
+			if (logger && logger.error) {
+				for (const reason of reasons) {
+					logger.error(reason);
+				}
+			}
+
 			return safeParseFailure(reasons.join('. '));
 		}
 
