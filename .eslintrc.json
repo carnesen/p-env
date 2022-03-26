@@ -3,6 +3,7 @@
 		"eslint-config-carnesen"
 	],
 	"rules": {
-		"class-methods-use-this": "off"
+		"class-methods-use-this": "off",
+		"no-lonely-if": "off"
 	}
 }

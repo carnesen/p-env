@@ -2,6 +2,8 @@
 
 ## Upcoming
 
+Breaking: Change PEnvAbstractType interface to only have a single public method safeParse (was protected and called safeParseInternal). This is only a breaking change if you've implemented your own custom concrete types or if you were using the individual field "parse" method.
+
 ## carnesen-p-env-0.4.0 (2022-03-24)
 
 Breaking: Change PEnvAbstractType method name from _safeParse to safeParseInternal. This is only a breaking change if you're using a custom PEnvAbstractType subclass.
