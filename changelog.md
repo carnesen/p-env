@@ -4,7 +4,7 @@
 
 ## carnesen-p-env-0.5.1 (2022-03-26)
 
-
+Fix: Remove @carnesen/p-dev as dependency. How'd that get in there?
 
 ## carnesen-p-env-0.5.0 (2022-03-26)
 
