@@ -44,8 +44,5 @@
 		"!src/**/__tests__",
 		"lib",
 		"!lib/**/__tests__"
-	],
-	"dependencies": {
-		"@carnesen/p-env": "^0.3.0"
-	}
+	]
 }
