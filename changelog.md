@@ -2,6 +2,8 @@
 
 ## Upcoming
 
+## carnesen-p-env-0.5.0 (2022-03-26)
+
 Breaking: Adopt a class-based schema interface and discard the POJO one.
 
 ```TypeScript

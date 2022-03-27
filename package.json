@@ -1,6 +1,6 @@
 {
 	"name": "@carnesen/p-env",
-	"version": "0.4.0",
+	"version": "0.5.0",
 	"description": "A TypeScript library for parsing process.env type-safely",
 	"main": "lib/index.js",
 	"types": "lib/index.d.ts",
@@ -12,7 +12,7 @@
 		"example": "ts-node src/examples.ts",
 		"lint": "eslint --ext .ts src",
 		"lint:fix": "npm run lint -- --fix",
-		"release": "carnesen-dev release",
+		"release": "carnesen-dev release --semverBump",
 		"start": "node lib",
 		"test": "./scripts/test.sh",
 		"unit-test": "NODE_ENV=test jest src --coverage",
