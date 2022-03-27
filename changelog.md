@@ -2,6 +2,8 @@
 
 ## Upcoming
 
+Fix: Make abstract the class returned by pEnvAbstractEnvFactory
+
 ## carnesen-p-env-0.5.1 (2022-03-26)
 
 Fix: Remove @carnesen/p-dev as dependency. How'd that get in there?

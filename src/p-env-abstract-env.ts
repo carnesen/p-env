@@ -4,7 +4,6 @@ import { PEnvLoader, pEnvLoader } from './p-env-loader';
 
 /** Generic type representing a new-able env class */
 export type PEnvAbstractEnv<Shape extends PEnvAnyShape> = {
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any
 	new (config?: PEnvAbstractEnvConfig): PEnvParsedProcessEnv<Shape>;
 };
 
@@ -33,7 +32,7 @@ export const NODE_ENV_PRODUCTION = 'production';
 export function pEnvAbstractEnvFactory<Shape extends PEnvAnyShape>(
 	shape: Shape,
 ): PEnvAbstractEnv<Shape> {
-	return class Env {
+	abstract class AbstractEnv {
 		constructor(config: PEnvAbstractEnvConfig = {}) {
 			const processEnv = (config.loader || pEnvLoader)();
 			const { logger } = config;
@@ -94,5 +93,7 @@ export function pEnvAbstractEnvFactory<Shape extends PEnvAnyShape>(
 
 			Object.assign(this, parsed);
 		}
-	} as PEnvAbstractEnv<Shape>;
+	}
+
+	return AbstractEnv as PEnvAbstractEnv<Shape>;
 }
