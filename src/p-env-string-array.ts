@@ -1,7 +1,10 @@
-import { PEnvAbstractType, PEnvTypeConfig } from './p-env-abstract-type';
+import {
+	PEnvAbstractType,
+	PEnvAbstractTypeConfig,
+} from './p-env-abstract-type';
 import { SafeParseResult, safeParseSuccess } from './safe-parse-result';
 
-export type PEnvStringArrayConfig = PEnvTypeConfig<string[]>;
+export type PEnvStringArrayConfig = PEnvAbstractTypeConfig<string[]>;
 
 export class PEnvStringArray extends PEnvAbstractType<string[]> {
 	private constructor(readonly config: PEnvStringArrayConfig) {

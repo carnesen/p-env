@@ -1,11 +1,14 @@
-import { PEnvAbstractType, PEnvTypeConfig } from './p-env-abstract-type';
+import {
+	PEnvAbstractType,
+	PEnvAbstractTypeConfig,
+} from './p-env-abstract-type';
 import {
 	safeParseFailure,
 	SafeParseResult,
 	safeParseSuccess,
 } from './safe-parse-result';
 
-export type PEnvBooleanConfig = PEnvTypeConfig<boolean>;
+export type PEnvBooleanConfig = PEnvAbstractTypeConfig<boolean>;
 
 export class PEnvBoolean extends PEnvAbstractType<boolean> {
 	private constructor(readonly config: PEnvBooleanConfig) {

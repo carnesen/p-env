@@ -1,5 +1,8 @@
 import { PEnvError } from './p-env-error';
-import { PEnvAbstractType, PEnvTypeConfig } from './p-env-abstract-type';
+import {
+	PEnvAbstractType,
+	PEnvAbstractTypeConfig,
+} from './p-env-abstract-type';
 import {
 	safeParseFailure,
 	SafeParseResult,
@@ -12,7 +15,7 @@ export const PORT_MAXIMUM = 65535;
 export const PORT_MINIMUM = 0;
 
 /** Configuration options for the `integer` value factory */
-export interface PEnvIntegerConfig extends PEnvTypeConfig<number> {
+export interface PEnvIntegerConfig extends PEnvAbstractTypeConfig<number> {
 	/** If provided, values greater than this are considered invalid */
 	maximum?: number;
 	/** If provided, values less than this are considered invalid */
