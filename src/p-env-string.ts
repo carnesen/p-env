@@ -1,12 +1,15 @@
 import { PEnvError } from './p-env-error';
-import { PEnvAbstractType, PEnvTypeConfig } from './p-env-abstract-type';
+import {
+	PEnvAbstractType,
+	PEnvAbstractTypeConfig,
+} from './p-env-abstract-type';
 import {
 	safeParseFailure,
 	SafeParseResult,
 	safeParseSuccess,
 } from './safe-parse-result';
 
-export interface PEnvStringConfig extends PEnvTypeConfig<string> {
+export interface PEnvStringConfig extends PEnvAbstractTypeConfig<string> {
 	/** If provided, a value longer than this is considered invalid */
 	maxLength?: number;
 }

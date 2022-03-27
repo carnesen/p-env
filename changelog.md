@@ -2,6 +2,20 @@
 
 ## Upcoming
 
+Breaking: Adopt a class-based schema interface and discard the POJO one.
+
+```TypeScript
+// Was
+const appEnvSchema = p.schema({ FOO: p.string({ default: "bar" }) });
+const appEnv = schema.parse();
+
+// Is
+const AppEnv = p.env({ FOO: p.string({ default: "bar" }) });
+const appEnv = new AppEnv();
+```
+
+This makes it easier to use p-env with dependency injection frameworks.
+
 Breaking: Change PEnvAbstractType interface to only have a single public method safeParse (was protected and called safeParseInternal). This is only a breaking change if you've implemented your own custom concrete types or if you were using the individual field "parse" method.
 
 ## carnesen-p-env-0.4.0 (2022-03-24)

@@ -14,16 +14,14 @@ Example usage:
 ```TypeScript
 import { p } from '@carnesen/p-env';
 
-const appEnvSchema = p.schema({
+class AppEnv extends p.env({
 	APP_NAME: p.string({ default: 'my-app' }),
 	PORT: p.port({ default: 8080, optional: true }),
 	SECRET_KEY: p.string({ default: '', secret: true }),
 	STRICT_MODE: p.boolean({ default: false, optional: true }),
-});
+}) {}
 
-type AppEnv = p.infer<typeof appEnvSchema>;
-
-const appEnv: AppEnv = appEnvSchema.parseProcessEnv({ logger: console });
+const appEnv = new AppEnv({ logger: console });
 // APP_NAME=my-app
 // PORT=8080
 // SECRET_KEY=<redacted>
@@ -33,9 +31,9 @@ console.log(appEnv.APP_NAME);
 // my-app
 ```
 
-Every field in the schema must have a default value. When `NODE_ENV` _is not_ `"production"` the default value will be used if a value is not provided in the process environment. When `NODE_ENV` _is_ `"production"`, the default value is ignored unless that field has `optional: true`.
+In the example above, the `AppEnv` constructor parses `process.env` and assigns the parsed values to the instance as `APP_NAME`, `PORT`, etc.
 
-The schema `safeParseProcessEnv` method returns `{ success: true, value: <the parsed process.env>}` if there are no validation/parse errors or `{ success: false, reason: <validation/parse error messages>}` otherwise. The schema `parseProcessEnv` method returns the parsed result value or throws if there's a validation/parse error.
+Every field in the schema must have a default value. When `NODE_ENV` _is not_ `"production"` the default value will be used if a value is not provided in the process environment. When `NODE_ENV` _is_ `"production"`, the default value is ignored unless that field has `optional: true`. If a non-optional value is not present, a `PEnvError` is thrown.
 
 ## API
 

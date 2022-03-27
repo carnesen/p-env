@@ -1,7 +1,7 @@
 import { SafeParseResult } from './safe-parse-result';
 
 /** Configuration options for a field in a schema */
-export interface PEnvTypeConfig<ParsedValue = unknown> {
+export type PEnvAbstractTypeConfig<ParsedValue = unknown> = {
 	/** Value used for this variable if it's not present in the environment and
 	 * NODE_ENV !== "production" */
 	default: ParsedValue;
@@ -10,10 +10,10 @@ export interface PEnvTypeConfig<ParsedValue = unknown> {
 	optional?: boolean;
 	/** If true, the value will be redacted in logs and error messages */
 	secret?: boolean;
-}
+};
 
 export abstract class PEnvAbstractType<Parsed = unknown> {
-	protected constructor(readonly config: PEnvTypeConfig<Parsed>) {}
+	protected constructor(readonly config: PEnvAbstractTypeConfig<Parsed>) {}
 
 	/** Parse an environment variable value if one is available. This method must
 	 * be implemented by the extending subclass */
