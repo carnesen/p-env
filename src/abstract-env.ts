@@ -1,16 +1,16 @@
-import { PEnvAbstractType } from './p-env-abstract-type';
-import { PEnvError } from './p-env-error';
-import { PEnvLoader, pEnvLoader } from './p-env-loader';
+import { PEnvAbstractFieldType } from './abstract-field-type';
+import { PEnvError } from './error';
+import { PEnvLoader, pEnvLoader } from './loader';
 
 /** Generic type representing a new-able env class */
-export type PEnvAbstractEnv<Shape extends PEnvAnyShape> = {
-	new (config?: PEnvAbstractEnvConfig): PEnvParsedProcessEnv<Shape>;
+export type PEnvAbstractEnv<Schema extends PEnvAnySchema> = {
+	new (config?: PEnvEnvConfig): PEnvParsedProcessEnv<Schema>;
 };
 
-export type PEnvAnyShape = Record<string, PEnvAbstractType>;
+export type PEnvAnySchema = Record<string, PEnvAbstractFieldType>;
 
-export type PEnvParsedProcessEnv<Shape extends PEnvAnyShape> = {
-	[name in keyof Shape]: Shape[name]['config']['default'];
+export type PEnvParsedProcessEnv<Schema extends PEnvAnySchema> = {
+	[name in keyof Schema]: Schema[name]['config']['default'];
 };
 
 export type PEnvLoggerMethod = (message: string) => unknown;
@@ -20,7 +20,7 @@ export type PEnvLogger = {
 	log?: PEnvLoggerMethod;
 };
 
-export type PEnvAbstractEnvConfig = {
+export type PEnvEnvConfig = {
 	loader?: PEnvLoader;
 	logger?: PEnvLogger;
 };
@@ -29,17 +29,24 @@ const REDACTED_VALUE = '<redacted>';
 
 export const NODE_ENV_PRODUCTION = 'production';
 
-export function pEnvAbstractEnvFactory<Shape extends PEnvAnyShape>(
-	shape: Shape,
-): PEnvAbstractEnv<Shape> {
-	abstract class AbstractEnv {
-		constructor(config: PEnvAbstractEnvConfig = {}) {
+export function pEnvAbstractEnvFactory<Schema extends PEnvAnySchema>(
+	schema: Schema,
+): PEnvAbstractEnv<Schema> {
+	/** Abstract class returned by the factory as a PEnvAbstractEnv<Schema>.
+	 * TypeScript doesn't enforce the `abstract` nature of this class because we
+	 * assert the returned type but we'll still mark it as `abstract` to
+	 * emphasize the intended use. We could return it as an anonymous class but
+	 * named classes read better in stack traces. Tack on an "_" at the end of
+	 * the class name to avoid a conflict with the generic type PEnvAbstractEnv
+	 * */
+	abstract class PEnvAbstractEnv_ {
+		constructor(config: PEnvEnvConfig = {}) {
 			const processEnv = (config.loader || pEnvLoader)();
 			const { logger } = config;
 			const parsed: Record<string, unknown> = {};
 			const reasons: string[] = [];
 			const { NODE_ENV } = processEnv;
-			for (const [name, valueType] of Object.entries(shape)) {
+			for (const [name, valueType] of Object.entries(schema)) {
 				const envValue = processEnv[name];
 				if (typeof envValue === 'string') {
 					// A value was provided in the process environment
@@ -95,5 +102,5 @@ export function pEnvAbstractEnvFactory<Shape extends PEnvAnyShape>(
 		}
 	}
 
-	return AbstractEnv as PEnvAbstractEnv<Shape>;
+	return PEnvAbstractEnv_ as PEnvAbstractEnv<Schema>;
 }

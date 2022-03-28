@@ -1,11 +1,12 @@
-export * as p from './external';
+export * as p from './p';
 
-export * from './p-env-abstract-env';
-export * from './p-env-abstract-type';
-export * from './p-env-boolean';
-export * from './p-env-error';
-export * from './p-env-loader';
-export * from './p-env-number';
-export * from './p-env-string-array';
-export * from './p-env-string';
-export * from './safe-parse-result';
+export * from './abstract-env';
+export * from './abstract-field-type';
+export * from './error';
+export * from './loader';
+export * from './result';
+
+export * from './field-types/boolean';
+export * from './field-types/number';
+export * from './field-types/string-array';
+export * from './field-types/string';

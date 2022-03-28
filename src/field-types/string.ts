@@ -1,20 +1,16 @@
-import { PEnvError } from './p-env-error';
+import { PEnvError } from '../error';
 import {
-	PEnvAbstractType,
-	PEnvAbstractTypeConfig,
-} from './p-env-abstract-type';
-import {
-	safeParseFailure,
-	SafeParseResult,
-	safeParseSuccess,
-} from './safe-parse-result';
+	PEnvAbstractFieldType,
+	PEnvFieldTypeConfig,
+} from '../abstract-field-type';
+import { pEnvFailure, PEnvResult, pEnvSuccess } from '../result';
 
-export interface PEnvStringConfig extends PEnvAbstractTypeConfig<string> {
+export interface PEnvStringConfig extends PEnvFieldTypeConfig<string> {
 	/** If provided, a value longer than this is considered invalid */
 	maxLength?: number;
 }
 
-export class PEnvString extends PEnvAbstractType<string> {
+export class PEnvString extends PEnvAbstractFieldType<string> {
 	private constructor(readonly config: PEnvStringConfig) {
 		super(config);
 		if (config.maxLength) {
@@ -29,16 +25,14 @@ export class PEnvString extends PEnvAbstractType<string> {
 		}
 	}
 
-	safeParse(envValue: string): SafeParseResult<string> {
+	safeParse(envValue: string): PEnvResult<string> {
 		if (
 			typeof this.config.maxLength === 'number' &&
 			envValue.length > this.config.maxLength
 		) {
-			return safeParseFailure(
-				`is longer than maxLength=${this.config.maxLength}`,
-			);
+			return pEnvFailure(`is longer than maxLength=${this.config.maxLength}`);
 		}
-		return safeParseSuccess(envValue);
+		return pEnvSuccess(envValue);
 	}
 
 	/** Factory for `string`-valued environment variables */

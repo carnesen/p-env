@@ -1,13 +1,13 @@
-import { p } from '..';
-import { PEnvError } from '../p-env-error';
-import { safeParseSuccess } from '../safe-parse-result';
+import { p } from '../..';
+import { PEnvError } from '../../error';
+import { pEnvSuccess } from '../../result';
 
 describe('non-optional string', () => {
 	const type = p.string({ default: 'bar', maxLength: 3 });
 
 	it('returns the environment value if one is provided', () => {
 		const parsed = type.safeParse('baz');
-		expect(parsed).toEqual(safeParseSuccess('baz'));
+		expect(parsed).toEqual(pEnvSuccess('baz'));
 	});
 
 	it('returns a failure result if value provided is greater than maxLength', () => {

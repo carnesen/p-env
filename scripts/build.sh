@@ -25,3 +25,6 @@ set -o xtrace
 
 rm -rf lib
 tsc
+
+rm -f carnesen-p-env-*.tgz
+npm pack

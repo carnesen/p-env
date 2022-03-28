@@ -1,6 +1,6 @@
 import { p } from '..';
-import { NODE_ENV_PRODUCTION } from '../p-env-abstract-env';
-import { PEnvError } from '../p-env-error';
+import { NODE_ENV_PRODUCTION } from '../abstract-env';
+import { PEnvError } from '../error';
 
 describe('p.env', () => {
 	class TestEnv extends p.env({
@@ -18,7 +18,7 @@ describe('p.env', () => {
 		expect(logger.log).toHaveBeenCalled();
 	});
 
-	it('returns an object of the correct shape and content', () => {
+	it('returns an object of the correct schema and content', () => {
 		const env = new TestEnv();
 		expect(env).toEqual({ NUMBER: 5, STRING: 'foo' });
 	});

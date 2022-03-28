@@ -1,13 +1,9 @@
-import { PEnvError } from './p-env-error';
+import { PEnvError } from '../error';
 import {
-	PEnvAbstractType,
-	PEnvAbstractTypeConfig,
-} from './p-env-abstract-type';
-import {
-	safeParseFailure,
-	SafeParseResult,
-	safeParseSuccess,
-} from './safe-parse-result';
+	PEnvAbstractFieldType,
+	PEnvFieldTypeConfig,
+} from '../abstract-field-type';
+import { pEnvFailure, PEnvResult, pEnvSuccess } from '../result';
 
 /** Maximum allowed value for a "port" variable */
 export const PORT_MAXIMUM = 65535;
@@ -15,7 +11,7 @@ export const PORT_MAXIMUM = 65535;
 export const PORT_MINIMUM = 0;
 
 /** Configuration options for the `integer` value factory */
-export interface PEnvIntegerConfig extends PEnvAbstractTypeConfig<number> {
+export interface PEnvIntegerConfig extends PEnvFieldTypeConfig<number> {
 	/** If provided, values greater than this are considered invalid */
 	maximum?: number;
 	/** If provided, values less than this are considered invalid */
@@ -31,7 +27,7 @@ export interface PEnvNumberConfig extends PEnvIntegerConfig {
 	integer?: boolean;
 }
 
-export class PEnvNumber extends PEnvAbstractType<number> {
+export class PEnvNumber extends PEnvAbstractFieldType<number> {
 	private constructor(readonly config: PEnvNumberConfig) {
 		super(config);
 
@@ -68,8 +64,8 @@ export class PEnvNumber extends PEnvAbstractType<number> {
 		}
 	}
 
-	safeParse(envValue: string): SafeParseResult<number> {
-		const failureToConvert = safeParseFailure("can't be converted to a number");
+	safeParse(envValue: string): PEnvResult<number> {
+		const failureToConvert = pEnvFailure("can't be converted to a number");
 		const trimmed = envValue.trim();
 		if (trimmed.length === 0) {
 			return failureToConvert;
@@ -81,28 +77,24 @@ export class PEnvNumber extends PEnvAbstractType<number> {
 		}
 
 		if (this.config.integer && !Number.isInteger(parsed)) {
-			return safeParseFailure('is not an integer');
+			return pEnvFailure('is not an integer');
 		}
 
 		if (
 			typeof this.config.minimum === 'number' &&
 			parsed < this.config.minimum
 		) {
-			return safeParseFailure(
-				`is less than the minimum ${this.config.minimum}`,
-			);
+			return pEnvFailure(`is less than the minimum ${this.config.minimum}`);
 		}
 
 		if (
 			typeof this.config.maximum === 'number' &&
 			parsed > this.config.maximum
 		) {
-			return safeParseFailure(
-				`is greater than the maximum ${this.config.maximum}`,
-			);
+			return pEnvFailure(`is greater than the maximum ${this.config.maximum}`);
 		}
 
-		return safeParseSuccess(parsed);
+		return pEnvSuccess(parsed);
 	}
 
 	/** Factory for `number`-valued environment variables */
