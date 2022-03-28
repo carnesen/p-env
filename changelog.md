@@ -2,6 +2,8 @@
 
 ## Upcoming
 
+## carnesen-p-env-0.6.0 (2022-03-27)
+
 Breaking: Rename `PEnvAbstractType` -> `PEnvAbstractFieldType`. This is only a breaking change if you've defined custom types.
 
 Fix: Make abstract the class returned by pEnvAbstractEnvFactory
