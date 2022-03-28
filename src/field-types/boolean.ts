@@ -1,34 +1,30 @@
 import {
-	PEnvAbstractType,
-	PEnvAbstractTypeConfig,
-} from './p-env-abstract-type';
-import {
-	safeParseFailure,
-	SafeParseResult,
-	safeParseSuccess,
-} from './safe-parse-result';
+	PEnvAbstractFieldType,
+	PEnvFieldTypeConfig,
+} from '../abstract-field-type';
+import { pEnvFailure, PEnvResult, pEnvSuccess } from '../result';
 
-export type PEnvBooleanConfig = PEnvAbstractTypeConfig<boolean>;
+export type PEnvBooleanConfig = PEnvFieldTypeConfig<boolean>;
 
-export class PEnvBoolean extends PEnvAbstractType<boolean> {
+export class PEnvBoolean extends PEnvAbstractFieldType<boolean> {
 	private constructor(readonly config: PEnvBooleanConfig) {
 		super(config);
 	}
 
-	safeParse(envValue: string): SafeParseResult<boolean> {
+	safeParse(envValue: string): PEnvResult<boolean> {
 		switch (envValue.trim().toLowerCase()) {
 			case '1':
 			case 'yes':
 			case 'true': {
-				return safeParseSuccess(true);
+				return pEnvSuccess(true);
 			}
 			case '0':
 			case 'no':
 			case 'false': {
-				return safeParseSuccess(false);
+				return pEnvSuccess(false);
 			}
 			default: {
-				return safeParseFailure("can't be converted to a boolean");
+				return pEnvFailure("can't be converted to a boolean");
 			}
 		}
 	}

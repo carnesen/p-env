@@ -1,19 +1,19 @@
-import { p } from '..';
-import { safeParseSuccess } from '../safe-parse-result';
+import { p } from '../..';
+import { pEnvSuccess } from '../../result';
 
 describe('boolean', () => {
 	it('returns `false` if provided value is "1", "no", or "false"', () => {
 		const type = p.boolean({ default: true });
-		expect(type.safeParse('no')).toEqual(safeParseSuccess(false));
-		expect(type.safeParse('false')).toEqual(safeParseSuccess(false));
-		expect(type.safeParse('0 ')).toEqual(safeParseSuccess(false));
+		expect(type.safeParse('no')).toEqual(pEnvSuccess(false));
+		expect(type.safeParse('false')).toEqual(pEnvSuccess(false));
+		expect(type.safeParse('0 ')).toEqual(pEnvSuccess(false));
 	});
 
 	it('returns `true` if provided value is "0", "yes", or "true"', () => {
 		const type = p.boolean({ default: false });
-		expect(type.safeParse('yes')).toEqual(safeParseSuccess(true));
-		expect(type.safeParse('true')).toEqual(safeParseSuccess(true));
-		expect(type.safeParse('1 ')).toEqual(safeParseSuccess(true));
+		expect(type.safeParse('yes')).toEqual(pEnvSuccess(true));
+		expect(type.safeParse('true')).toEqual(pEnvSuccess(true));
+		expect(type.safeParse('1 ')).toEqual(pEnvSuccess(true));
 	});
 
 	it('fails if provided value is anything else', () => {

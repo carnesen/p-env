@@ -1,12 +1,12 @@
-import { p } from '..';
-import { PEnvError } from '../p-env-error';
-import { safeParseSuccess } from '../safe-parse-result';
+import { p } from '../..';
+import { PEnvError } from '../../error';
+import { pEnvSuccess } from '../../result';
 
 describe('number', () => {
 	const type = p.number({ default: 5, minimum: 0, maximum: 10, integer: true });
 
 	it('returns the provided value as a number', () => {
-		expect(type.safeParse('6')).toEqual(safeParseSuccess(6));
+		expect(type.safeParse('6')).toEqual(pEnvSuccess(6));
 	});
 
 	it('returns a failure result if a value less than minimum is provided', () => {

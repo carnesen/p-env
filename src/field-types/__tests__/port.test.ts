@@ -1,6 +1,6 @@
-import { p } from '..';
-import { PEnvError } from '../p-env-error';
-import { PORT_MAXIMUM, PORT_MINIMUM } from '../p-env-number';
+import { p } from '../..';
+import { PEnvError } from '../../error';
+import { PORT_MAXIMUM, PORT_MINIMUM } from '../number';
 
 describe('port', () => {
 	it('creates an integer number with min and max set by default', () => {
