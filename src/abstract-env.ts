@@ -1,4 +1,5 @@
 import { PEnvAbstractFieldType } from './abstract-field-type';
+import { P_ENV_REDACTED_VALUE } from './constants';
 import { PEnvError } from './error';
 import { PEnvLoader, pEnvLoader } from './loader';
 
@@ -24,8 +25,6 @@ export type PEnvEnvConfig = {
 	loader?: PEnvLoader;
 	logger?: PEnvLogger;
 };
-
-const REDACTED_VALUE = '<redacted>';
 
 export const NODE_ENV_PRODUCTION = 'production';
 
@@ -55,7 +54,7 @@ export function pEnvAbstractEnvFactory<Schema extends PEnvAnySchema>(
 						parsed[name] = result.value;
 						if (logger && logger.log) {
 							const loggedValue = valueType.config.secret
-								? REDACTED_VALUE
+								? P_ENV_REDACTED_VALUE
 								: result.value;
 							logger.log(`${name}=${loggedValue}`);
 						}
@@ -64,7 +63,7 @@ export function pEnvAbstractEnvFactory<Schema extends PEnvAnySchema>(
 						const parts = [name];
 						if (typeof envValue !== 'undefined') {
 							const loggedEnvValue = valueType.config.secret
-								? REDACTED_VALUE
+								? P_ENV_REDACTED_VALUE
 								: envValue;
 							parts.push(`value "${loggedEnvValue}"`);
 						}
@@ -77,7 +76,7 @@ export function pEnvAbstractEnvFactory<Schema extends PEnvAnySchema>(
 					if (valueType.config.optional || NODE_ENV !== NODE_ENV_PRODUCTION) {
 						parsed[name] = valueType.config.default;
 						const loggedValue = valueType.config.secret
-							? REDACTED_VALUE
+							? P_ENV_REDACTED_VALUE
 							: valueType.config.default;
 
 						if (logger && logger.log) {

@@ -15,7 +15,7 @@
 		"release": "carnesen-dev release --semverBump",
 		"start": "node lib",
 		"test": "./scripts/test.sh",
-		"unit-test": "NODE_ENV=test jest src --coverage",
+		"unit-test": "jest src --coverage",
 		"unit-test:watch": "npm run unit-test -- --watch"
 	},
 	"devDependencies": {
