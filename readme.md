@@ -97,9 +97,9 @@ There are three factories for `number` valued environment variables
 
 `p.stringArray`: Factory for `string[]`-valued environment variables. The `stringArray` parser splits the environment value on `,`. 
 
-### String array
+### String one of
 
-`p.stringArray`: Factory for `string[]`-valued environment variables. The `stringArray` parser splits the environment value on `,`. 
+`p.stringOneOf`: Factory for environment variables that must be one of the allowed values provided
 
 ### Custom types
 
