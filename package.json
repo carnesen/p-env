@@ -1,6 +1,6 @@
 {
 	"name": "@carnesen/p-env",
-	"version": "0.6.0",
+	"version": "0.7.0",
 	"description": "A TypeScript library for parsing process.env type-safely",
 	"main": "lib/index.js",
 	"types": "lib/index.d.ts",
