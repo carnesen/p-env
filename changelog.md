@@ -2,6 +2,8 @@
 
 ## Upcoming
 
+Support "string one of" field type where the value in the environment must be one of the allowed values
+
 ## carnesen-p-env-0.6.0 (2022-03-27)
 
 Breaking: Rename `PEnvAbstractType` -> `PEnvAbstractFieldType`. This is only a breaking change if you've defined custom types.
