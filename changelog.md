@@ -2,9 +2,11 @@
 
 ## Upcoming
 
+Feature: Field factory `p.json` for parsing environment variable values as JSON
+
 ## carnesen-p-env-0.7.0 (2022-10-21)
 
-Support "string one of" field type where the value in the environment must be one of the allowed values
+Feature: "string one of" field type where the value in the environment must be one of the allowed values
 
 ## carnesen-p-env-0.6.0 (2022-03-27)
 

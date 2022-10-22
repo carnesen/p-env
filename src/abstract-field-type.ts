@@ -17,5 +17,5 @@ export abstract class PEnvAbstractFieldType<Parsed = unknown> {
 
 	/** Parse an environment variable value if one is available. This method must
 	 * be implemented by the extending subclass */
-	public abstract safeParse(envValue: string): PEnvResult<Parsed>;
+	public abstract safeParse(rawValue: string): PEnvResult<Parsed>;
 }

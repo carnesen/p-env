@@ -25,14 +25,14 @@ export class PEnvString extends PEnvAbstractFieldType<string> {
 		}
 	}
 
-	safeParse(envValue: string): PEnvResult<string> {
+	safeParse(rawValue: string): PEnvResult<string> {
 		if (
 			typeof this.config.maxLength === 'number' &&
-			envValue.length > this.config.maxLength
+			rawValue.length > this.config.maxLength
 		) {
 			return pEnvFailure(`is longer than maxLength=${this.config.maxLength}`);
 		}
-		return pEnvSuccess(envValue);
+		return pEnvSuccess(rawValue);
 	}
 
 	/** Factory for `string`-valued environment variables */

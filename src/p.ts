@@ -6,6 +6,7 @@ import { PEnvBoolean } from './field-types/boolean';
 import { PEnvStringArray } from './field-types/string-array';
 import { pEnvAbstractEnvFactory } from './abstract-env';
 import { PEnvStringOneOf } from './field-types/string-one-of';
+import { PEnvJson } from './field-types/json';
 
 /** Abstract env factory */
 export const env = pEnvAbstractEnvFactory;
@@ -13,6 +14,7 @@ export const env = pEnvAbstractEnvFactory;
 /** Types */
 export const boolean = PEnvBoolean.create;
 export const integer = PEnvNumber.createInteger;
+export const json = PEnvJson.create;
 export const number = PEnvNumber.create;
 export const port = PEnvNumber.createPort;
 export const string = PEnvString.create;

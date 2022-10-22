@@ -7,6 +7,7 @@ export * from './loader';
 export * from './result';
 
 export * from './field-types/boolean';
+export * from './field-types/json';
 export * from './field-types/number';
 export * from './field-types/string-array';
 export * from './field-types/string-one-of';

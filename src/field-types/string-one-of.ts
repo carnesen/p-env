@@ -27,7 +27,7 @@ export class PEnvStringOneOf<
 	private constructor(readonly config: PEnvStringOneOfConfig<Values_>) {
 		super(config);
 		for (const value of this.config.values) {
-			const standardized = standardizeEnvValue(value);
+			const standardized = standardizeRawValue(value);
 			if (standardized !== value) {
 				throw new PEnvError(
 					`This field type trims whitespace from the raw environment value before attempting to match it to one of configured allowed values. The value "${value}" will never be matched because it has leading or trailing whitespace`,
@@ -41,8 +41,8 @@ export class PEnvStringOneOf<
 		}
 	}
 
-	safeParse(envValue: string): PEnvResult<Parsed<Values_>> {
-		const standardized = standardizeEnvValue(envValue);
+	safeParse(rawValue: string): PEnvResult<Parsed<Values_>> {
+		const standardized = standardizeRawValue(rawValue);
 		if (!this.config.values.includes(standardized)) {
 			return pEnvFailure(
 				`is not one of the allowed values: ${this.allowedValuesString}`,
@@ -55,7 +55,15 @@ export class PEnvStringOneOf<
 		? P_ENV_REDACTED_VALUE
 		: this.config.values.map((value) => `"${value}"`).join(', ');
 
-	/** Factory for string-literal-valued environment variables */
+	/** Factory for environment variables whose value is one of the provided
+	 * values. The parsed value is typed as an item in the provided `values`
+	 * array. Use a [const
+	 * assertion](https://www.typescriptlang.org/docs/handbook/release-notes/typescript-3-4.html#const-assertions)
+	 * to make sure its type is narrow e.g.:
+	 * ```
+	 * const MODES = ["normal", "fast", "ludicrous"] as const;
+	 * ```
+	 * */
 	static create<Values extends AnyValues>(
 		options: PEnvStringOneOfConfig<Values>,
 	): PEnvStringOneOf<Values> {
@@ -63,8 +71,8 @@ export class PEnvStringOneOf<
 	}
 }
 
-/** Function called on the raw environment variable to trim whitespace before
- * attempting to match it against one of the config values */
-function standardizeEnvValue(envValue: string): string {
-	return envValue.trim();
+/** Function called on the raw environment variable value to trim whitespace
+ * before attempting to match it against one of the configured values */
+function standardizeRawValue(rawValue: string): string {
+	return rawValue.trim();
 }

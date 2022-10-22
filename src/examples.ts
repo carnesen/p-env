@@ -2,35 +2,41 @@
 import { p } from '.';
 
 class AppEnv extends p.env({
-	APP_NAME: p.string({ default: 'my-app', optional: true }),
-	ENV: p.stringOneOf({
+	APP: p.string({ default: 'my-app', optional: true }),
+	DATA: p.json({ default: [] }),
+	MODE: p.stringOneOf({
 		default: 'dev',
 		values: ['dev', 'qa', 'prod'] as const,
 	}),
 	PORT: p.port({ default: 8080 }),
-	SECRET_KEY: p.string({ default: 'abc123', secret: true }),
-	STRICT_MODE: p.boolean({ default: false, optional: true }),
+	SECRET: p.string({ default: 'abc123', secret: true }),
+	STRICT: p.boolean({ default: false, optional: true }),
 }) {}
 
 // The AppEnv constructor parses `process.env` and assigns the
-// parsed values to the new instance. Suppose STRICT_MODE is
-// set to "yes" (or "1" or "true") in the process environment.
+// parsed values to the new instance. Suppose STRICT is
+// set to "1" (or "yes" or "true") in the process environment.
 
 const appEnv = new AppEnv({ logger: console });
-// APP_NAME=my-app (default)
-// ENV=dev (default)
+// APP="my-app" (default)
+// DATA=[] (default)
+// MODE="dev" (default)
 // PORT=8080 (default)
-// SECRET_KEY=<redacted> (default)
-// STRICT_MODE=false (default)
+// SECRET=<redacted> (default)
+// STRICT=true ("1")
 
 // ^^ Parsed values for fields with `secret: true` are redacted in logs and
-// error messages. A log line with "(default)" means a default value was used.
+// error messages
+
+// ^^ A log with (default) means a default value was used. Otherwise the logged
+// line has ("<raw value>") where <raw value> is the string value from the
+// process environment.
 
 console.log(appEnv);
 // AppEnv {
-//   APP_NAME: 'my-app',
-//   ENV: 'dev'
+//   APP: 'my-app',
+//   MODE: 'dev'
 //   PORT: 10000,
-//   SECRET_KEY: 'abc123',
-//   STRICT_MODE: true
+//   SECRET: 'abc123',
+//   STRICT: true
 // }

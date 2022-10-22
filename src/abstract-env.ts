@@ -46,25 +46,30 @@ export function pEnvAbstractEnvFactory<Schema extends PEnvAnySchema>(
 			const reasons: string[] = [];
 			const { NODE_ENV } = processEnv;
 			for (const [name, valueType] of Object.entries(schema)) {
-				const envValue = processEnv[name];
-				if (typeof envValue === 'string') {
+				const rawValue = processEnv[name];
+				if (typeof rawValue === 'string') {
 					// A value was provided in the process environment
-					const result = valueType.safeParse(envValue);
+					const result = valueType.safeParse(rawValue);
 					if (result.success) {
 						parsed[name] = result.value;
 						if (logger && logger.log) {
-							const loggedValue = valueType.config.secret
+							const loggedValue: string = valueType.config.secret
 								? P_ENV_REDACTED_VALUE
-								: result.value;
-							logger.log(`${name}=${loggedValue}`);
+								: loggedValueFromParsedValue(result.value);
+
+							const loggedRawValue: string = valueType.config.secret
+								? P_ENV_REDACTED_VALUE
+								: rawValue;
+
+							logger.log(`${name}=${loggedValue} ("${loggedRawValue}")`);
 						}
 					} else {
 						// !result.success
 						const parts = [name];
-						if (typeof envValue !== 'undefined') {
+						if (typeof rawValue !== 'undefined') {
 							const loggedEnvValue = valueType.config.secret
 								? P_ENV_REDACTED_VALUE
-								: envValue;
+								: rawValue;
 							parts.push(`value "${loggedEnvValue}"`);
 						}
 						parts.push(result.reason);
@@ -75,9 +80,9 @@ export function pEnvAbstractEnvFactory<Schema extends PEnvAnySchema>(
 					// No value was provided in the process environment
 					if (valueType.config.optional || NODE_ENV !== NODE_ENV_PRODUCTION) {
 						parsed[name] = valueType.config.default;
-						const loggedValue = valueType.config.secret
+						const loggedValue: string = valueType.config.secret
 							? P_ENV_REDACTED_VALUE
-							: valueType.config.default;
+							: loggedValueFromParsedValue(valueType.config.default);
 
 						if (logger && logger.log) {
 							logger.log(`${name}=${loggedValue} (default)`);
@@ -102,4 +107,8 @@ export function pEnvAbstractEnvFactory<Schema extends PEnvAnySchema>(
 	}
 
 	return PEnvAbstractEnv_ as PEnvAbstractEnv<Schema>;
+}
+
+export function loggedValueFromParsedValue(value: unknown): string {
+	return JSON.stringify(value);
 }

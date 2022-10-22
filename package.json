@@ -9,7 +9,7 @@
 	},
 	"scripts": {
 		"build": "./scripts/build.sh",
-		"example": "ts-node src/examples.ts",
+		"examples": "STRICT=1 ts-node src/examples.ts",
 		"lint": "eslint --ext .ts src",
 		"lint:fix": "npm run lint -- --fix",
 		"release": "carnesen-dev release --semverBump",
