@@ -2,6 +2,8 @@
 
 ## Upcoming
 
+## carnesen-p-env-0.8.0 (2022-10-22)
+
 Feature: Field factory `p.json` for parsing environment variable values as JSON
 
 ## carnesen-p-env-0.7.0 (2022-10-21)
