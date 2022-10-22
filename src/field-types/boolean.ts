@@ -11,8 +11,8 @@ export class PEnvBoolean extends PEnvAbstractFieldType<boolean> {
 		super(config);
 	}
 
-	safeParse(envValue: string): PEnvResult<boolean> {
-		switch (envValue.trim().toLowerCase()) {
+	safeParse(rawValue: string): PEnvResult<boolean> {
+		switch (rawValue.trim().toLowerCase()) {
 			case '1':
 			case 'yes':
 			case 'true': {
@@ -29,9 +29,17 @@ export class PEnvBoolean extends PEnvAbstractFieldType<boolean> {
 		}
 	}
 
-	/** Factory for boolean-valued environment variables. "1", "true", "yes" (and
-	 * their upper-case variations) parse to `true`. "0", "false", and "no" (and
-	 * their upper-case variations) parse to `false` */
+	/** Factory for boolean-valued environment variables with mappings:
+	 * - `true`: any string lower-casing to "1", "true" or "yes"
+	 * - `false`: any string lower-casing to "0", "false", or "no"
+	 *
+	 * Note that this does *not* adhere to the convention that if *any*
+	 * environment value is present (e.g. even "false"), that should be
+	 * interpreted as `true`. The convention used here allows us to define
+	 * `boolean`-valued fields with default value `false`. Doing so, however, may
+	 * cause cognitive dissonance for folks that are used to the other
+	 * convention.
+	 * */
 	static create(options: PEnvBooleanConfig): PEnvBoolean {
 		return new PEnvBoolean(options);
 	}

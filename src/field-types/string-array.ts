@@ -11,8 +11,8 @@ export class PEnvStringArray extends PEnvAbstractFieldType<string[]> {
 		super(config);
 	}
 
-	safeParse(envValue: string): PEnvResult<string[]> {
-		return pEnvSuccess(envValue.split(','));
+	safeParse(rawValue: string): PEnvResult<string[]> {
+		return pEnvSuccess(rawValue.split(','));
 	}
 
 	/** Factory for `string[]`-valued environment variables. The raw environment

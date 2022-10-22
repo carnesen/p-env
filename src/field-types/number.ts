@@ -64,13 +64,13 @@ export class PEnvNumber extends PEnvAbstractFieldType<number> {
 		}
 	}
 
-	safeParse(envValue: string): PEnvResult<number> {
+	safeParse(rawValue: string): PEnvResult<number> {
 		const failureToConvert = pEnvFailure("can't be converted to a number");
-		const trimmed = envValue.trim();
+		const trimmed = rawValue.trim();
 		if (trimmed.length === 0) {
 			return failureToConvert;
 		}
-		const parsed = Number(envValue);
+		const parsed = Number(rawValue);
 
 		if (Number.isNaN(parsed)) {
 			return failureToConvert;

@@ -15,37 +15,43 @@ Here's an example of how to use it in your code:
 import { p } from '@carnesen/p-env';
 
 class AppEnv extends p.env({
-	APP_NAME: p.string({ default: 'my-app', optional: true }),
-	ENV: p.stringOneOf({
+	APP: p.string({ default: 'my-app', optional: true }),
+	DATA: p.json({ default: [] }),
+	MODE: p.stringOneOf({
 		default: 'dev',
 		values: ['dev', 'qa', 'prod'] as const,
 	}),
 	PORT: p.port({ default: 8080 }),
-	SECRET_KEY: p.string({ default: 'abc123', secret: true }),
-	STRICT_MODE: p.boolean({ default: false, optional: true }),
+	SECRET: p.string({ default: 'abc123', secret: true }),
+	STRICT: p.boolean({ default: false, optional: true }),
 }) {}
 
 // The AppEnv constructor parses `process.env` and assigns the
-// parsed values to the new instance. Suppose STRICT_MODE is
-// set to "yes" (or "1" or "true") in the process environment.
+// parsed values to the new instance. Suppose STRICT is
+// set to "1" (or "yes" or "true") in the process environment.
 
 const appEnv = new AppEnv({ logger: console });
-// APP_NAME=my-app (default)
-// ENV=dev (default)
+// APP="my-app" (default)
+// DATA=[] (default)
+// MODE="dev" (default)
 // PORT=8080 (default)
-// SECRET_KEY=<redacted> (default)
-// STRICT_MODE=false (default)
+// SECRET=<redacted> (default)
+// STRICT=true ("1")
 
-// ^^ Parsed values for fields with `secret: true` are redacted in logs and
-// error messages. A log line with "(default)" means a default value was used.
+// ^^ Parsed values for fields with `secret: true` are redacted
+// in logs and error messages
+
+// ^^ A log with (default) means a default value was used.
+// Otherwise the logged line has ("<raw value>") where 
+// <raw value> is the string value from the process environment.
 
 console.log(appEnv);
 // AppEnv {
-//   APP_NAME: 'my-app',
-//   ENV: 'dev'
+//   APP: 'my-app',
+//   MODE: 'dev'
 //   PORT: 10000,
-//   SECRET_KEY: 'abc123',
-//   STRICT_MODE: true
+//   SECRET: 'abc123',
+//   STRICT: true
 // }
 ```
 
@@ -67,19 +73,19 @@ When `NODE_ENV` is `"production"` and no environment value is provided for a non
 
 This primary documentation for this package's API is its rich, strict types along with their associated TypeDoc strings viewable in your IDE by hovering over a symbol. All exports are named. The primary export is the `p` namespace object `import { p } from "@carnesen/p-env"`.
 
-### Env
+### env
 
 `p.env`: Takes a single argument defining your environment object's schema and returns a abstract class that you should extend as a named class e.g. `class MyEnv extends p.env({})`. The named class's constructor parses `process.env` and assigns the parsed values to the new instance. The named class's constructor takes an optional `config` object argument `new MyEnv({ logger, loader }).` If `logger.log` is provided, the parsed values are logged. If `logger.error` is provided, parse/validation errors are logged. Use the `loader` property to define a custom `process.env` loader. This is mostly useful for unit testing.
 
-### Type configuration
+### Field factories
 
-All type factories (`p.boolean` etc.) take a `config` object argument with a single mandatory property `default` and optional properties `optional` and `secret`. The meaning of `optional` is described above. If `secret` is true, the field value is redacted in logs and error messages. Some of the field types have other optional properties too.
+All field factories (`p.boolean` etc.) take a `config` object argument with a single mandatory property `default` and optional properties `optional` and `secret`. The meaning of `optional` is described above. If `secret` is true, the field value is redacted in logs and error messages. Some of the field types have other optional properties too.
 
-### Boolean
+### boolean
 
 `p.boolean`: Factory for `boolean`-valued environment variables. "1", "true", "yes" (and their upper-case/white-spaced variations) parse to `true`. "0", "false", and "no" and their upper-case/white-spaced variations) parse to `false`.
 
-### Number
+### number
 
 There are three factories for `number` valued environment variables
 
@@ -89,17 +95,17 @@ There are three factories for `number` valued environment variables
 
 `p.port`: Same as `p.integer` with `minimum: 0` and `maximum: 65535`. Optional config properties `maximum` and `minimum` further restrict the allowed range.
 
-### String
+### string
 
 `p.string`: Factory for `string`-valued environment variables. The `string` parser returns the environment value as-is.
 
-### String array
+### stringArray
 
 `p.stringArray`: Factory for `string[]`-valued environment variables. The `stringArray` parser splits the environment value on `,`. 
 
-### String one of
+### stringOneOf
 
-`p.stringOneOf`: Factory for environment variables that must be one of the allowed values provided
+`p.stringOneOf`: Factory for environment variables that must be one of the allowed values provided. 
 
 ### Custom types
 

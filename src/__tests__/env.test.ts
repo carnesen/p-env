@@ -9,7 +9,7 @@ describe('p.env', () => {
 	}) {}
 
 	class SecretEnv extends p.env({
-		SECRET_KEY: p.string({ default: 'abc123', secret: true }),
+		SECRET: p.string({ default: 'abc123', secret: true }),
 	}) {}
 
 	it('can be instantiated with a config object', () => {
@@ -63,7 +63,7 @@ describe('p.env', () => {
 		expect(logger.error.mock.calls).toEqual([
 			['STRING value "foo bar baz" is longer than maxLength=3'],
 		]);
-		expect(logger.log.mock.calls).toEqual([['NUMBER=3']]);
+		expect(logger.log.mock.calls).toEqual([['NUMBER=3 ("3")']]);
 	});
 
 	it('uses logger.log for errors if logger.error is not provided', () => {
@@ -80,7 +80,7 @@ describe('p.env', () => {
 		expect(logger.error.mock.calls).toEqual([
 			['STRING value "foo bar baz" is longer than maxLength=3'],
 		]);
-		expect(logger.log.mock.calls).toEqual([['NUMBER=3']]);
+		expect(logger.log.mock.calls).toEqual([['NUMBER=3 ("3")']]);
 	});
 
 	it('redacts the logged value when an environment value is used and secret=true', () => {
@@ -89,9 +89,9 @@ describe('p.env', () => {
 		};
 		const _env = new SecretEnv({
 			logger,
-			loader: () => ({ SECRET_KEY: 'foobar' }),
+			loader: () => ({ SECRET: 'foobar' }),
 		});
-		expect(logger.log.mock.calls[0][0]).toMatch('SECRET_KEY=');
+		expect(logger.log.mock.calls[0][0]).toMatch('SECRET=');
 		expect(logger.log.mock.calls[0][0]).not.toMatch('foobar');
 	});
 
@@ -102,7 +102,7 @@ describe('p.env', () => {
 		const _env = new SecretEnv({
 			logger,
 		});
-		expect(logger.log.mock.calls[0][0]).toMatch('SECRET_KEY=');
+		expect(logger.log.mock.calls[0][0]).toMatch('SECRET=');
 		expect(logger.log.mock.calls[0][0]).toMatch('(default)');
 		expect(logger.log.mock.calls[0][0]).not.toMatch('abc123');
 	});
