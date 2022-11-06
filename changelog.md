@@ -2,6 +2,8 @@
 
 ## Upcoming
 
+Feature: Field factory `p.bigint` for parsing environment variables as `bigint`
+
 ## carnesen-p-env-0.8.0 (2022-10-22)
 
 Feature: Field factory `p.json` for parsing environment variable values as JSON
