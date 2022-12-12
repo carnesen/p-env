@@ -11,7 +11,7 @@ export interface PEnvStringConfig extends PEnvFieldTypeConfig<string> {
 }
 
 export class PEnvString extends PEnvAbstractFieldType<string> {
-	private constructor(readonly config: PEnvStringConfig) {
+	private constructor(public readonly config: PEnvStringConfig) {
 		super(config);
 		if (config.maxLength) {
 			if (config.maxLength < 0) {
@@ -25,7 +25,7 @@ export class PEnvString extends PEnvAbstractFieldType<string> {
 		}
 	}
 
-	safeParse(rawValue: string): PEnvResult<string> {
+	public safeParse(rawValue: string): PEnvResult<string> {
 		if (
 			typeof this.config.maxLength === 'number' &&
 			rawValue.length > this.config.maxLength
@@ -36,7 +36,7 @@ export class PEnvString extends PEnvAbstractFieldType<string> {
 	}
 
 	/** Factory for `string`-valued environment variables */
-	static create(options: PEnvStringConfig): PEnvString {
+	public static create(options: PEnvStringConfig): PEnvString {
 		return new PEnvString(options);
 	}
 }

@@ -7,11 +7,11 @@ import { pEnvFailure, PEnvResult, pEnvSuccess } from '../result';
 export type PEnvBigIntConfig = PEnvFieldTypeConfig<bigint>;
 
 export class PEnvBigInt extends PEnvAbstractFieldType<bigint> {
-	private constructor(readonly config: PEnvBigIntConfig) {
+	private constructor(public readonly config: PEnvBigIntConfig) {
 		super(config);
 	}
 
-	safeParse(rawValue: string): PEnvResult<bigint> {
+	public safeParse(rawValue: string): PEnvResult<bigint> {
 		const trimmed = rawValue.trim();
 		if (trimmed.length === 0) {
 			return pEnvFailure('unwilling to convert empty string to bigint');
@@ -28,7 +28,7 @@ export class PEnvBigInt extends PEnvAbstractFieldType<bigint> {
 	}
 
 	/** Factory for bigint-valued environment variables */
-	static create(options: PEnvBigIntConfig): PEnvBigInt {
+	public static create(options: PEnvBigIntConfig): PEnvBigInt {
 		return new PEnvBigInt(options);
 	}
 }

@@ -28,7 +28,7 @@ export interface PEnvNumberConfig extends PEnvIntegerConfig {
 }
 
 export class PEnvNumber extends PEnvAbstractFieldType<number> {
-	private constructor(readonly config: PEnvNumberConfig) {
+	private constructor(public readonly config: PEnvNumberConfig) {
 		super(config);
 
 		if (config.maximum) {
@@ -64,7 +64,7 @@ export class PEnvNumber extends PEnvAbstractFieldType<number> {
 		}
 	}
 
-	safeParse(rawValue: string): PEnvResult<number> {
+	public safeParse(rawValue: string): PEnvResult<number> {
 		const failureToConvert = pEnvFailure("can't be converted to a number");
 		const trimmed = rawValue.trim();
 		if (trimmed.length === 0) {
@@ -98,19 +98,19 @@ export class PEnvNumber extends PEnvAbstractFieldType<number> {
 	}
 
 	/** Factory for `number`-valued environment variables */
-	static create(config: PEnvNumberConfig): PEnvNumber {
+	public static create(config: PEnvNumberConfig): PEnvNumber {
 		return new PEnvNumber(config);
 	}
 
 	/** Factory for integer-valued (`number`) environment variables. */
-	static createInteger(config: PEnvIntegerConfig): PEnvNumber {
+	public static createInteger(config: PEnvIntegerConfig): PEnvNumber {
 		return new PEnvNumber({ ...config, integer: true });
 	}
 
 	/** Factory for integer-valued (`number`) environment variables between 0 and
 	 * 65535, suitable for usage as a server [IP
 	 * port](https://en.wikipedia.org/wiki/Port_(computer_networking)) */
-	static createPort(config: PEnvPortConfig): PEnvNumber {
+	public static createPort(config: PEnvPortConfig): PEnvNumber {
 		const maximum =
 			typeof config.maximum === 'number' ? config.maximum : PORT_MAXIMUM;
 		if (maximum > PORT_MAXIMUM) {
