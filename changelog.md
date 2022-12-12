@@ -2,6 +2,8 @@
 
 ## Upcoming
 
+Feature: Field factory `p.date` for parsing environment variables as `Date`
+
 ## carnesen-p-env-0.9.0 (2022-11-06)
 
 Feature: Field factory `p.bigint` for parsing environment variables as `bigint`

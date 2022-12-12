@@ -3,7 +3,8 @@ import { p } from '.';
 
 class AppEnv extends p.env({
 	APP: p.string({ default: 'my-app', optional: true }),
-	DATA: p.json({ default: [] }),
+	DATE: p.date({ default: new Date() }),
+	JSON: p.json({ default: [] }),
 	MODE: p.stringOneOf({
 		default: 'dev',
 		values: ['dev', 'qa', 'prod'] as const,
@@ -19,7 +20,8 @@ class AppEnv extends p.env({
 
 const appEnv = new AppEnv({ logger: console });
 // APP="my-app" (default)
-// DATA=[] (default)
+// DATE="2022-12-12T16:45:24.607Z"
+// JSON=[] (default)
 // MODE="dev" (default)
 // PORT=8080 (default)
 // SECRET=<redacted> (default)
@@ -35,8 +37,10 @@ const appEnv = new AppEnv({ logger: console });
 console.log(appEnv);
 // AppEnv {
 //   APP: 'my-app',
+//   DATE: 2022-12-12T16:45:24.607Z,
+//   JSON: [],
 //   MODE: 'dev'
-//   PORT: 10000,
+//   PORT: 8080,
 //   SECRET: 'abc123',
 //   STRICT: true
 // }

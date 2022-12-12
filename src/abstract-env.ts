@@ -28,6 +28,7 @@ export type PEnvEnvConfig = {
 
 export const NODE_ENV_PRODUCTION = 'production';
 
+/** A factory for p-env environment classes */
 export function pEnvAbstractEnvFactory<Schema extends PEnvAnySchema>(
 	schema: Schema,
 ): PEnvAbstractEnv<Schema> {
