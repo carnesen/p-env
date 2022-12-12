@@ -2,6 +2,8 @@
 
 ## Upcoming
 
+Internal: Support Node.js 18. Upgrade dependencies.
+
 ## carnesen-p-env-0.10.0 (2022-12-12)
 
 Feature: Field factory `p.date` for parsing environment variables as `Date`

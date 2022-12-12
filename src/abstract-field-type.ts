@@ -13,7 +13,7 @@ export type PEnvFieldTypeConfig<ParsedValue = unknown> = {
 };
 
 export abstract class PEnvAbstractFieldType<Parsed = unknown> {
-	protected constructor(readonly config: PEnvFieldTypeConfig<Parsed>) {}
+	protected constructor(public readonly config: PEnvFieldTypeConfig<Parsed>) {}
 
 	/** Parse an environment variable value if one is available. This method must
 	 * be implemented by the extending subclass */

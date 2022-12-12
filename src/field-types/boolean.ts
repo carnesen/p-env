@@ -7,11 +7,11 @@ import { pEnvFailure, PEnvResult, pEnvSuccess } from '../result';
 export type PEnvBooleanConfig = PEnvFieldTypeConfig<boolean>;
 
 export class PEnvBoolean extends PEnvAbstractFieldType<boolean> {
-	private constructor(readonly config: PEnvBooleanConfig) {
+	private constructor(public readonly config: PEnvBooleanConfig) {
 		super(config);
 	}
 
-	safeParse(rawValue: string): PEnvResult<boolean> {
+	public safeParse(rawValue: string): PEnvResult<boolean> {
 		switch (rawValue.trim().toLowerCase()) {
 			case '1':
 			case 'yes':
@@ -40,7 +40,7 @@ export class PEnvBoolean extends PEnvAbstractFieldType<boolean> {
 	 * cause cognitive dissonance for folks that are used to the other
 	 * convention.
 	 * */
-	static create(options: PEnvBooleanConfig): PEnvBoolean {
+	public static create(options: PEnvBooleanConfig): PEnvBoolean {
 		return new PEnvBoolean(options);
 	}
 }

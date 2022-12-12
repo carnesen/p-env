@@ -24,7 +24,7 @@ export interface PEnvStringOneOfConfig<Values extends AnyValues>
 export class PEnvStringOneOf<
 	Values_ extends AnyValues,
 > extends PEnvAbstractFieldType<Parsed<Values_>> {
-	private constructor(readonly config: PEnvStringOneOfConfig<Values_>) {
+	private constructor(public readonly config: PEnvStringOneOfConfig<Values_>) {
 		super(config);
 		for (const value of this.config.values) {
 			const standardized = standardizeRawValue(value);
@@ -41,7 +41,7 @@ export class PEnvStringOneOf<
 		}
 	}
 
-	safeParse(rawValue: string): PEnvResult<Parsed<Values_>> {
+	public safeParse(rawValue: string): PEnvResult<Parsed<Values_>> {
 		const standardized = standardizeRawValue(rawValue);
 		if (!this.config.values.includes(standardized)) {
 			return pEnvFailure(
@@ -64,7 +64,7 @@ export class PEnvStringOneOf<
 	 * const MODES = ["normal", "fast", "ludicrous"] as const;
 	 * ```
 	 * */
-	static create<Values extends AnyValues>(
+	public static create<Values extends AnyValues>(
 		options: PEnvStringOneOfConfig<Values>,
 	): PEnvStringOneOf<Values> {
 		return new PEnvStringOneOf(options);

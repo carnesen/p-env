@@ -40,7 +40,7 @@ export function pEnvAbstractEnvFactory<Schema extends PEnvAnySchema>(
 	 * the class name to avoid a conflict with the generic type PEnvAbstractEnv
 	 * */
 	abstract class PEnvAbstractEnv_ {
-		constructor(config: PEnvEnvConfig = {}) {
+		public constructor(config: PEnvEnvConfig = {}) {
 			const processEnv = (config.loader || pEnvLoader)();
 			const { logger } = config;
 			const parsed: Record<string, unknown> = {};
