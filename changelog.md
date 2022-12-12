@@ -2,6 +2,8 @@
 
 ## Upcoming
 
+## carnesen-p-env-0.10.0 (2022-12-12)
+
 Feature: Field factory `p.date` for parsing environment variables as `Date`
 
 ## carnesen-p-env-0.9.0 (2022-11-06)
