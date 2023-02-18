@@ -22,7 +22,7 @@ export type PEnvVarConfig<Value = unknown> = {
 };
 
 /**
- * An environment variable in a p-env schema
+ * Environment variable in a p-env schema
  */
 export abstract class PEnvVar<Value = unknown> {
 	protected constructor(public readonly config: PEnvVarConfig<Value>) {}

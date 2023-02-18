@@ -2,7 +2,13 @@
 
 ## Upcoming
 
-Internal: Support Node.js 18. Upgrade dependencies.
+Feature: Allow config to be provided as `p.env(schema, config)`. Previously config was only providable at instantiation `new MyEnv(config)`. Now if both are provided they are shallow merged with instance config taking priority.
+
+Feature: Export a PEnvBase base class from which all p.env classes descend. This allows us to do prototype-based sanity checks like `MyEnv.prototype instanceof PEnvBase` and `myEnv instanceof PEnvBase` in advanced use cases.
+
+Advanced breaking: Simplify the names of several advanced types e.g. PEnvEnvConfig --> PEnvConfig, PEnvAbstractEnv --> PEnv. This is only breaking if you're using these advanced types directly in your code.
+
+Internal: Add official support for Node.js 18, 19. Upgrade dependencies.
 
 ## carnesen-p-env-0.10.0 (2022-12-12)
 

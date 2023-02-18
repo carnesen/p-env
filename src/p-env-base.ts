@@ -7,6 +7,9 @@ import { PEnvAnySchema } from './p-env-any-schema';
 
 /**
  * Base class extended by p.env
+ *
+ * This class's constructor parses `process.env` and assigns the values to
+ * `this`.
  */
 export abstract class PEnvBase<Schema extends PEnvAnySchema> {
 	public constructor(schema: Schema, config: PEnvConfig) {

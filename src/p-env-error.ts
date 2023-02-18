@@ -1,2 +1,4 @@
-/** Error class thrown by code in this package */
+/**
+ * `Error` class thrown by p-env code
+ */
 export class PEnvError extends Error {}

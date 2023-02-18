@@ -1,6 +1,6 @@
 [![build status badge](https://github.com/carnesen/p-env/workflows/test/badge.svg)](https://github.com/carnesen/p-env/actions?query=workflow%3Atest+branch%3Amaster)
 
-An isomorphic TypeScript library for parsing `process.env` type-safely
+An [isomorphic](https://en.wikipedia.org/wiki/Isomorphic_JavaScript) TypeScript library for parsing process [environment variables](https://en.wikipedia.org/wiki/Environment_variable) type-safely
 
 ## Usage
 
@@ -13,9 +13,6 @@ Here's an example of how to use it in your code:
 
 ```TypeScript
 import { p } from '@carnesen/p-env';
-
-/* eslint-disable no-console */
-import { p } from '.';
 
 class AppEnv extends p.env({
    APP: p.string({ default: 'my-app', optional: true }),
@@ -30,13 +27,13 @@ class AppEnv extends p.env({
    STRICT: p.boolean({ default: false, optional: true }),
 }) {}
 
-// The AppEnv constructor parses `process.env` and assigns the
+// The `AppEnv` constructor parses `process.env` and assigns the
 // parsed values to the new instance. Suppose STRICT is
 // set to "1" (or "yes" or "true") in the process environment.
 
 const appEnv = new AppEnv({ logger: console });
 // APP="my-app" (default)
-// DATE="2022-12-12T16:45:24.607Z"
+// DATE="2023-02-12T16:45:24.607Z"
 // JSON=[] (default)
 // MODE="dev" (default)
 // PORT=8080 (default)
@@ -53,7 +50,7 @@ const appEnv = new AppEnv({ logger: console });
 console.log(appEnv);
 // AppEnv {
 //   APP: 'my-app',
-//   DATE: 2022-12-12T16:45:24.607Z,
+//   DATE: 2023-02-12T16:45:24.607Z,
 //   JSON: [],
 //   MODE: 'dev'
 //   PORT: 8080,
@@ -64,7 +61,7 @@ console.log(appEnv);
 
 ## `default` and `optional`
 
-Every field in the schema must have a `default` value. A environment value always takes precedence over the `default` value. If an environment value is not provided, two factors determine whether the `default` value is used: 
+Every environment variable in the schema must have a `default` value. A environment value always takes precedence over the `default` value. If an environment value is not provided, two factors determine whether the `default` value is used: 
 - Is Node.js is running in [development or production mode](https://nodejs.dev/learn/nodejs-the-difference-between-development-and-production)?
 - Does the field have `optional` set to `true`?
 
@@ -84,9 +81,9 @@ This primary documentation for this package's API is its rich, strict types alon
 
 `p.env`: Takes a single argument defining your environment object's schema and returns a abstract class that you should extend as a named class e.g. `class MyEnv extends p.env({})`. The named class's constructor parses `process.env` and assigns the parsed values to the new instance. The named class's constructor takes an optional `config` object argument `new MyEnv({ logger, loader }).` If `logger.log` is provided, the parsed values are logged. If `logger.error` is provided, parse/validation errors are logged. Use the `loader` property to define a custom `process.env` loader. This is mostly useful for unit testing.
 
-### Field factories
+### Environment variable factories
 
-All field factories (`p.boolean` etc.) take a `config` object argument with a single mandatory property `default` and optional properties `optional` and `secret`. The meaning of `optional` is described above. If `secret` is true, the field value is redacted in logs and error messages. Some of the field types have other optional properties too.
+All environment variable factories (`p.boolean` etc.) take a `config` object with a mandatory property `default` and optional properties `optional` and `secret`. The meaning of `optional` is described above. If `secret` is true, the value is redacted in logs and error messages. Some of the environment variable types have other optional properties too.
 
 ### boolean
 
@@ -116,7 +113,7 @@ There are three factories for `number` valued environment variables
 
 ### Custom types
 
-To create your own custom field type, extend `PEnvAbstractType` using the built-in classes (`PEnvBoolean` etc.) as your guide.
+To create your own custom environment variable type, extend `PEnvVar` using the built-in classes (`PEnvBoolean` etc.) as your guide.
 
 ## More information
 
