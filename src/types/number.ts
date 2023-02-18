@@ -1,9 +1,6 @@
-import { PEnvError } from '../error';
-import {
-	PEnvAbstractFieldType,
-	PEnvFieldTypeConfig,
-} from '../abstract-field-type';
-import { pEnvFailure, PEnvResult, pEnvSuccess } from '../result';
+import { PEnvError } from '../p-env-error';
+import { PEnvVar, PEnvVarConfig } from '../p-env-var';
+import { pEnvFailure, PEnvResult, pEnvSuccess } from '../p-env-result';
 
 /** Maximum allowed value for a "port" variable */
 export const PORT_MAXIMUM = 65535;
@@ -11,7 +8,7 @@ export const PORT_MAXIMUM = 65535;
 export const PORT_MINIMUM = 0;
 
 /** Configuration options for the `integer` value factory */
-export interface PEnvIntegerConfig extends PEnvFieldTypeConfig<number> {
+export interface PEnvIntegerConfig extends PEnvVarConfig<number> {
 	/** If provided, values greater than this are considered invalid */
 	maximum?: number;
 	/** If provided, values less than this are considered invalid */
@@ -27,7 +24,7 @@ export interface PEnvNumberConfig extends PEnvIntegerConfig {
 	integer?: boolean;
 }
 
-export class PEnvNumber extends PEnvAbstractFieldType<number> {
+export class PEnvNumber extends PEnvVar<number> {
 	private constructor(public readonly config: PEnvNumberConfig) {
 		super(config);
 

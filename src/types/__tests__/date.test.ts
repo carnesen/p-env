@@ -1,5 +1,5 @@
 import { p } from '../..';
-import { pEnvSuccess } from '../../result';
+import { pEnvSuccess } from '../../p-env-result';
 
 describe('date', () => {
 	it('returns a `new Date` constructed with the provided string', () => {

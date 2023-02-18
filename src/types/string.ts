@@ -1,16 +1,13 @@
-import { PEnvError } from '../error';
-import {
-	PEnvAbstractFieldType,
-	PEnvFieldTypeConfig,
-} from '../abstract-field-type';
-import { pEnvFailure, PEnvResult, pEnvSuccess } from '../result';
+import { PEnvError } from '../p-env-error';
+import { PEnvVar, PEnvVarConfig } from '../p-env-var';
+import { pEnvFailure, PEnvResult, pEnvSuccess } from '../p-env-result';
 
-export interface PEnvStringConfig extends PEnvFieldTypeConfig<string> {
+export interface PEnvStringConfig extends PEnvVarConfig<string> {
 	/** If provided, a value longer than this is considered invalid */
 	maxLength?: number;
 }
 
-export class PEnvString extends PEnvAbstractFieldType<string> {
+export class PEnvString extends PEnvVar<string> {
 	private constructor(public readonly config: PEnvStringConfig) {
 		super(config);
 		if (config.maxLength) {

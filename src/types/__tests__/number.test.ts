@@ -1,6 +1,6 @@
 import { p } from '../..';
-import { PEnvError } from '../../error';
-import { pEnvSuccess } from '../../result';
+import { PEnvError } from '../../p-env-error';
+import { pEnvSuccess } from '../../p-env-result';
 
 describe('number', () => {
 	const type = p.number({ default: 5, minimum: 0, maximum: 10, integer: true });

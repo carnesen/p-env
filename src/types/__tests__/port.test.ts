@@ -1,5 +1,5 @@
 import { p } from '../..';
-import { PEnvError } from '../../error';
+import { PEnvError } from '../../p-env-error';
 import { PORT_MAXIMUM, PORT_MINIMUM } from '../number';
 
 describe('port', () => {

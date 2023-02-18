@@ -1,12 +1,9 @@
-import {
-	PEnvAbstractFieldType,
-	PEnvFieldTypeConfig,
-} from '../abstract-field-type';
-import { pEnvFailure, PEnvResult, pEnvSuccess } from '../result';
+import { PEnvVar, PEnvVarConfig } from '../p-env-var';
+import { pEnvFailure, PEnvResult, pEnvSuccess } from '../p-env-result';
 
-export type PEnvBooleanConfig = PEnvFieldTypeConfig<boolean>;
+export type PEnvBooleanConfig = PEnvVarConfig<boolean>;
 
-export class PEnvBoolean extends PEnvAbstractFieldType<boolean> {
+export class PEnvBoolean extends PEnvVar<boolean> {
 	private constructor(public readonly config: PEnvBooleanConfig) {
 		super(config);
 	}

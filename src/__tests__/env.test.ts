@@ -1,6 +1,5 @@
 import { p } from '..';
-import { NODE_ENV_PRODUCTION } from '../abstract-env';
-import { PEnvError } from '../error';
+import { PEnvError } from '../p-env-error';
 
 describe('p.env', () => {
 	class TestEnv extends p.env({
@@ -26,7 +25,7 @@ describe('p.env', () => {
 	it('throws an PEnvError result with all the reasons', () => {
 		const func = () =>
 			new TestEnv({
-				loader: () => ({ NODE_ENV: NODE_ENV_PRODUCTION }),
+				loader: () => ({ NODE_ENV: 'production' }),
 			});
 		expect(func).toThrow('NUMBER is not optional');
 		expect(func).toThrow('STRING is not optional');

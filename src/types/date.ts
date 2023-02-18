@@ -1,12 +1,9 @@
-import {
-	PEnvAbstractFieldType,
-	PEnvFieldTypeConfig,
-} from '../abstract-field-type';
-import { pEnvFailure, PEnvResult, pEnvSuccess } from '../result';
+import { PEnvVar, PEnvVarConfig } from '../p-env-var';
+import { pEnvFailure, PEnvResult, pEnvSuccess } from '../p-env-result';
 
-export type PEnvDateConfig = PEnvFieldTypeConfig<Date>;
+export type PEnvDateConfig = PEnvVarConfig<Date>;
 
-export class PEnvDate extends PEnvAbstractFieldType<Date> {
+export class PEnvDate extends PEnvVar<Date> {
 	private constructor(public readonly config: PEnvDateConfig) {
 		super(config);
 	}
