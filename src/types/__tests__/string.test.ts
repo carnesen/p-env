@@ -1,6 +1,6 @@
 import { p } from '../..';
-import { PEnvError } from '../../error';
-import { pEnvSuccess } from '../../result';
+import { PEnvError } from '../../p-env-error';
+import { pEnvSuccess } from '../../p-env-result';
 
 describe('non-optional string', () => {
 	const type = p.string({ default: 'bar', maxLength: 3 });

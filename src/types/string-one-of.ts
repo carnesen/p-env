@@ -1,12 +1,9 @@
 /** This module defines a field type where the parsed value is one of the
  * values provided */
-import {
-	PEnvAbstractFieldType,
-	PEnvFieldTypeConfig,
-} from '../abstract-field-type';
-import { pEnvFailure, PEnvResult, pEnvSuccess } from '../result';
-import { P_ENV_REDACTED_VALUE } from '../constants';
-import { PEnvError } from '../error';
+import { PEnvVar, PEnvVarConfig } from '../p-env-var';
+import { pEnvFailure, PEnvResult, pEnvSuccess } from '../p-env-result';
+import { P_ENV_REDACTED_VALUE } from '../p-env-redacted-value';
+import { PEnvError } from '../p-env-error';
 
 type AnyValues = string[] | readonly string[];
 
@@ -17,13 +14,13 @@ type Parsed<Values extends AnyValues> = Values extends readonly string[]
 	: string;
 
 export interface PEnvStringOneOfConfig<Values extends AnyValues>
-	extends PEnvFieldTypeConfig<Parsed<Values>> {
+	extends PEnvVarConfig<Parsed<Values>> {
 	values: Values;
 }
 
-export class PEnvStringOneOf<
-	Values_ extends AnyValues,
-> extends PEnvAbstractFieldType<Parsed<Values_>> {
+export class PEnvStringOneOf<Values_ extends AnyValues> extends PEnvVar<
+	Parsed<Values_>
+> {
 	private constructor(public readonly config: PEnvStringOneOfConfig<Values_>) {
 		super(config);
 		for (const value of this.config.values) {

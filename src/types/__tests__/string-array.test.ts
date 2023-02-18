@@ -1,5 +1,5 @@
 import { p } from '../..';
-import { pEnvSuccess } from '../../result';
+import { pEnvSuccess } from '../../p-env-result';
 
 describe('stringArray', () => {
 	const type = p.stringArray({ default: [] });

@@ -1,5 +1,5 @@
 import { p } from '../..';
-import { pEnvSuccess } from '../../result';
+import { pEnvSuccess } from '../../p-env-result';
 
 describe('boolean', () => {
 	it('returns `false` if provided value is "1", "no", or "false"', () => {

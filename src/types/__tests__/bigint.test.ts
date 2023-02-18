@@ -1,5 +1,5 @@
 import { p } from '../..';
-import { pEnvSuccess } from '../../result';
+import { pEnvSuccess } from '../../p-env-result';
 
 describe('boolean', () => {
 	it('parses the provided number as a bigint', () => {

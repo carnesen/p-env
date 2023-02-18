@@ -2,12 +2,12 @@
  * define our own type and getter for for process.env */
 
 /** Expected type of globalThis.process.env */
-export type ProcessEnv = Record<string, string | undefined>;
+export type PEnvProcessEnv = Record<string, string | undefined>;
 
-export type PEnvLoader = () => ProcessEnv;
+export type PEnvProcessEnvLoader = () => PEnvProcessEnv;
 
 /** Safely load the global variable process.env defaulting to {} */
-export function pEnvLoader(): ProcessEnv {
+export function pEnvProcessEnvLoader(): PEnvProcessEnv {
 	/* eslint-disable-next-line @typescript-eslint/no-explicit-any */
 	return (globalThis as any).process?.env || {};
 }

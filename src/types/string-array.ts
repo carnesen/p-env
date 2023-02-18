@@ -1,12 +1,9 @@
-import {
-	PEnvAbstractFieldType,
-	PEnvFieldTypeConfig,
-} from '../abstract-field-type';
-import { PEnvResult, pEnvSuccess } from '../result';
+import { PEnvVar, PEnvVarConfig } from '../p-env-var';
+import { PEnvResult, pEnvSuccess } from '../p-env-result';
 
-export type PEnvStringArrayConfig = PEnvFieldTypeConfig<string[]>;
+export type PEnvStringArrayConfig = PEnvVarConfig<string[]>;
 
-export class PEnvStringArray extends PEnvAbstractFieldType<string[]> {
+export class PEnvStringArray extends PEnvVar<string[]> {
 	private constructor(public readonly config: PEnvStringArrayConfig) {
 		super(config);
 	}

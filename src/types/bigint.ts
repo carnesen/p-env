@@ -1,12 +1,9 @@
-import {
-	PEnvAbstractFieldType,
-	PEnvFieldTypeConfig,
-} from '../abstract-field-type';
-import { pEnvFailure, PEnvResult, pEnvSuccess } from '../result';
+import { PEnvVar, PEnvVarConfig } from '../p-env-var';
+import { pEnvFailure, PEnvResult, pEnvSuccess } from '../p-env-result';
 
-export type PEnvBigIntConfig = PEnvFieldTypeConfig<bigint>;
+export type PEnvBigIntConfig = PEnvVarConfig<bigint>;
 
-export class PEnvBigInt extends PEnvAbstractFieldType<bigint> {
+export class PEnvBigInt extends PEnvVar<bigint> {
 	private constructor(public readonly config: PEnvBigIntConfig) {
 		super(config);
 	}
