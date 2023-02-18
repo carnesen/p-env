@@ -2,6 +2,8 @@
 
 ## Upcoming
 
+## carnesen-p-env-0.11.0 (2023-02-18)
+
 Feature: Allow config to be provided as `p.env(schema, config)`. Previously config was only providable at instantiation `new MyEnv(config)`. Now if both are provided they are shallow merged with instance config taking priority.
 
 Feature: Export a PEnvBase base class from which all p.env classes descend. This allows us to do prototype-based sanity checks like `MyEnv.prototype instanceof PEnvBase` and `myEnv instanceof PEnvBase` in advanced use cases.

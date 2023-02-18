@@ -79,11 +79,11 @@ This primary documentation for this package's API is its rich, strict types alon
 
 ### env
 
-`p.env`: Takes a single argument defining your environment object's schema and returns a abstract class that you should extend as a named class e.g. `class MyEnv extends p.env({})`. The named class's constructor parses `process.env` and assigns the parsed values to the new instance. The named class's constructor takes an optional `config` object argument `new MyEnv({ logger, loader }).` If `logger.log` is provided, the parsed values are logged. If `logger.error` is provided, parse/validation errors are logged. Use the `loader` property to define a custom `process.env` loader. This is mostly useful for unit testing.
+`p.env`: Takes a single argument defining your environment object's schema and returns an anonymous class whose constructor parses `process.env` and assigns the parsed values to the new instance. We recommend extending the anonymous class as a named one e.g. `class MyEnv extends p.env({...}) {}`, but you're welcome to use the anonymous one directly as e.g. `const MyClass = p.env({...})`. The class constructor takes an optional `config` object argument `new MyEnv({ logger, loader }).` If `logger.log` is provided, the parsed values are logged. If `logger.error` is provided, parse/validation errors are logged. Use the `loader` property to define a custom `process.env` loader. This is mostly useful for unit testing. `config` can also/instead be passed as the second argument of `p.env`. If a `config`s is provided to `p.env` and to the class constructor, the class constructor one takes precedence.
 
 ### Environment variable factories
 
-All environment variable factories (`p.boolean` etc.) take a `config` object with a mandatory property `default` and optional properties `optional` and `secret`. The meaning of `optional` is described above. If `secret` is true, the value is redacted in logs and error messages. Some of the environment variable types have other optional properties too.
+A p-env schema declares a name (e.g. PORT) and a type for each environment variable. The environment variable factories `p.boolean`, `p.string`, etc. take a `config` object with a mandatory property `default` and optional properties `optional` and `secret`. The meaning of `optional` is described above. If `secret` is true, the value shows as "<redacted>" in logs and error messages. Some of the environment variable types have other optional properties too.
 
 ### boolean
 
