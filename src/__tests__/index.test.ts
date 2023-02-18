@@ -1,15 +1,50 @@
-import { p } from '..';
-import { PEnvError } from '../p-env-error';
+import { p, PEnvError, PEnvBase, PEnvConfig } from '..';
 
 describe('p.env', () => {
-	class TestEnv extends p.env({
+	const BaseEnv = p.env({
 		NUMBER: p.number({ default: 5 }),
 		STRING: p.string({ default: 'foo', maxLength: 3 }),
-	}) {}
+	});
+
+	class TestEnv extends BaseEnv {}
 
 	class SecretEnv extends p.env({
 		SECRET: p.string({ default: 'abc123', secret: true }),
 	}) {}
+
+	it(`returns an anonymous class that can be instantiated directly`, () => {
+		const env = new BaseEnv();
+		expect(env.NUMBER).toBe(5);
+		expect((env as unknown as Record<string, string>).name).toBe(undefined);
+	});
+
+	it(`can be provided a config object`, () => {
+		const loader = jest.fn().mockImplementation(() => ({ env: {} }));
+		const config: PEnvConfig = {
+			loader,
+		};
+		const MyEnv = p.env({}, config);
+		const _env = new MyEnv();
+		expect(loader).toHaveBeenCalled();
+	});
+
+	it(`instance config takes precedence over class config`, () => {
+		const classConfig: PEnvConfig = {
+			loader: jest.fn().mockImplementation(() => ({ env: {} })),
+		};
+		const instanceConfig: PEnvConfig = {
+			loader: jest.fn().mockImplementation(() => ({ env: {} })),
+		};
+		const MyEnv = p.env({}, classConfig);
+		const _env = new MyEnv(instanceConfig);
+		expect(classConfig.loader).not.toHaveBeenCalled();
+		expect(instanceConfig.loader).toHaveBeenCalled();
+	});
+
+	it(`extends ${PEnvBase.name}`, () => {
+		expect(TestEnv.prototype instanceof PEnvBase).toBe(true);
+		expect(new TestEnv() instanceof PEnvBase).toBe(true);
+	});
 
 	it('can be instantiated with a config object', () => {
 		const logger = { log: jest.fn() };
@@ -22,7 +57,7 @@ describe('p.env', () => {
 		expect(env).toEqual({ NUMBER: 5, STRING: 'foo' });
 	});
 
-	it('throws an PEnvError result with all the reasons', () => {
+	it(`throws an ${PEnvError.name} result with all the reasons`, () => {
 		const func = () =>
 			new TestEnv({
 				loader: () => ({ NODE_ENV: 'production' }),
