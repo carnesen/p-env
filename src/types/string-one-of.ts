@@ -5,22 +5,24 @@ import { pEnvFailure, PEnvResult, pEnvSuccess } from '../p-env-result';
 import { P_ENV_REDACTED_VALUE } from '../p-env-redacted-value';
 import { PEnvError } from '../p-env-error';
 
-type AnyValues = string[] | readonly string[];
+export type PEnvStringOneOfAnyValues = string[] | readonly string[];
 
-type Parsed<Values extends AnyValues> = Values extends readonly string[]
+export type PEnvStringOneOfParsedValue<
+	Values extends PEnvStringOneOfAnyValues,
+> = Values extends readonly string[]
 	? Values[number]
 	: Values extends string[]
-	? Values[number]
-	: string;
+		? Values[number]
+		: string;
 
-export interface PEnvStringOneOfConfig<Values extends AnyValues>
-	extends PEnvVarConfig<Parsed<Values>> {
+export interface PEnvStringOneOfConfig<Values extends PEnvStringOneOfAnyValues>
+	extends PEnvVarConfig<PEnvStringOneOfParsedValue<Values>> {
 	values: Values;
 }
 
-export class PEnvStringOneOf<Values_ extends AnyValues> extends PEnvVar<
-	Parsed<Values_>
-> {
+export class PEnvStringOneOf<
+	Values_ extends PEnvStringOneOfAnyValues,
+> extends PEnvVar<PEnvStringOneOfParsedValue<Values_>> {
 	private constructor(public readonly config: PEnvStringOneOfConfig<Values_>) {
 		super(config);
 		for (const value of this.config.values) {
@@ -38,14 +40,18 @@ export class PEnvStringOneOf<Values_ extends AnyValues> extends PEnvVar<
 		}
 	}
 
-	public safeParse(rawValue: string): PEnvResult<Parsed<Values_>> {
+	public safeParse(
+		rawValue: string,
+	): PEnvResult<PEnvStringOneOfParsedValue<Values_>> {
 		const standardized = standardizeRawValue(rawValue);
 		if (!this.config.values.includes(standardized)) {
 			return pEnvFailure(
 				`is not one of the allowed values: ${this.allowedValuesString}`,
 			);
 		}
-		return pEnvSuccess(standardized) as PEnvResult<Parsed<Values_>>;
+		return pEnvSuccess(standardized) as PEnvResult<
+			PEnvStringOneOfParsedValue<Values_>
+		>;
 	}
 
 	private readonly allowedValuesString = this.config.secret
@@ -61,7 +67,7 @@ export class PEnvStringOneOf<Values_ extends AnyValues> extends PEnvVar<
 	 * const MODES = ["normal", "fast", "ludicrous"] as const;
 	 * ```
 	 * */
-	public static create<Values extends AnyValues>(
+	public static create<const Values extends PEnvStringOneOfAnyValues>(
 		options: PEnvStringOneOfConfig<Values>,
 	): PEnvStringOneOf<Values> {
 		return new PEnvStringOneOf(options);

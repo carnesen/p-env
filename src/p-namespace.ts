@@ -19,6 +19,9 @@ export const number = PEnvNumber.create;
 export const integer = PEnvNumber.createInteger;
 export const port = PEnvNumber.createPort;
 
+import { PEnvNumberArray } from './types/number-array';
+export const numberArray = PEnvNumberArray.create;
+
 import { PEnvString } from './types/string';
 export const string = PEnvString.create;
 
@@ -27,5 +30,8 @@ export const stringArray = PEnvStringArray.create;
 
 import { PEnvStringOneOf } from './types/string-one-of';
 export const stringOneOf = PEnvStringOneOf.create;
+
+import { PEnvStringOneOfArray } from './types/string-one-of-array';
+export const stringOneOfArray = PEnvStringOneOfArray.create;
 
 export { pEnvFactory as env } from './p-env';

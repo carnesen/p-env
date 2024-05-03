@@ -5,7 +5,7 @@ import { pEnvSuccess } from '../../p-env-result';
 describe('non-optional string', () => {
 	const field = p.stringOneOf({
 		default: 'foo',
-		values: ['foo', 'bar'] as const,
+		values: ['foo', 'bar'],
 	});
 
 	it('returns the environment value if it is one of the allowed values', () => {
@@ -37,7 +37,8 @@ describe('non-optional string', () => {
 	});
 
 	it('factory throws if config.default is not an allowed value', () => {
-		const func = () => p.stringOneOf({ default: 'bar', values: ['foo'] });
+		const func = () =>
+			p.stringOneOf({ default: 'bar' as 'foo', values: ['foo'] });
 		expect(func).toThrow(PEnvError);
 		expect(func).toThrow('not one of the allowed values');
 	});

@@ -2,6 +2,14 @@
 
 ## Upcoming
 
+Node.js support: 
+- Dropped: 14, 16
+- Maintenance: 18
+- Active: 20
+- Current: 22
+
+Feature: Add types numberArray and stringOneOfArray
+
 ## carnesen-p-env-0.11.0 (2023-02-18)
 
 Feature: Allow config to be provided as `p.env(schema, config)`. Previously config was only providable at instantiation `new MyEnv(config)`. Now if both are provided they are shallow merged with instance config taking priority.
