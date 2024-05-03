@@ -4,6 +4,7 @@ export * as p from './p-namespace';
 export * from './types/boolean';
 export * from './types/json';
 export * from './types/number';
+export * from './types/number-array';
 export * from './types/string-array';
 export * from './types/string-one-of';
 export * from './types/string';
